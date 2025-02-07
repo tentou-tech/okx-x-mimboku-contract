@@ -1,5 +1,5 @@
 {
-  "name": "okx-x-mimboku-contract",
+  "name": "nft-launchpad",
   "version": "0.0.1",
   "description": "the nft contract for launchpad",
   "main": "index.js",
@@ -27,7 +27,8 @@
     "typechain": "^8.3.2"
   },
   "devDependencies": {
-    "@story-protocol/protocol-core": "github:storyprotocol/protocol-core-v1#3ef2a99",
-    "@story-protocol/protocol-periphery": "github:storyprotocol/protocol-periphery-v1#ea88959"
+    "@story-protocol/protocol-core-v1.2.3": "github:storyprotocol/protocol-core-v1#58f023c",
+    "@story-protocol/protocol-core-v1.3.0": "github:storyprotocol/protocol-core-v1#3ef2a99",
+    "@story-protocol/protocol-periphery-v1.3.0": "github:storyprotocol/protocol-periphery-v1#ea88959"
   }
 }

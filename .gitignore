@@ -129,13 +129,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# For Forge Foundry
-.out/
+# Hardhat files
+cache
+artifacts
 
-# Ignores development broadcast logs
-!/broadcast
-/broadcast/*/31337/
-/broadcast/**/dry-run/
-
-# Docs
-docs/
+.secret

@@ -3,7 +3,6 @@
 @storyprotocol/core/=node_modules/@story-protocol/protocol-core/contracts/
 @storyprotocol/script/=node_modules/@story-protocol/protocol-core/script/foundry/
 @storyprotocol/test/=node_modules/@story-protocol/protocol-core/test/foundry/
-@story-protocol/protocol-periphery/=node_modules/@story-protocol/protocol-periphery/
 @solady/=node_modules/solady/
 ds-test/=lib/forge-std/lib/ds-test/src/
 forge-std/=lib/forge-std/src/

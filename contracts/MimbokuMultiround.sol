@@ -81,6 +81,14 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
     //                               WRITE FUNCTIONS                                //
     //////////////////////////////////////////////////////////////////////////////////
 
+    /// @notice Updates the MULTIROUND_CONTRACT and the NFT_CONTRACT addresses.
+    /// @param nftContract The new NFT contract address.
+    /// @param multiRoundContract The new MultiRound contract address.
+    function setContracts(address nftContract, address multiRoundContract) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        NFT_CONTRACT = nftContract;
+        MULTIROUND_CONTRACT = multiRoundContract;
+    }
+
     /// @notice Updates the whitelist signer.
     /// @param signer_ The new whitelist signer address.
     function setSigner(address signer_) external onlyRole(OWNER_ROLE) {

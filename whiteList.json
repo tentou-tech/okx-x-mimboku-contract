@@ -1,0 +1,56 @@
+{
+  "whiteList": [
+    {
+      "address": "0xe5a325ef78660df15b367d2f0e2469b4361c9884",
+      "leaf": "0x0x2fbb59927b1a068cc92ff52b3541d6ec6e207b44007ba49b204b1e1b093fca05",
+      "proof": [
+        "0x672feb6faaad8bd739801673b5b2e9ba4c4ba915a28dd234f794efd0fb65c56f",
+        "0x47006626bec6ce6a45435fd026c849f64fb6da85feef6bfb3388cea5d15ba930",
+        "0xdd435c2ade0fe5983318ad141e455b8033e1280c3cd0876416d85512a2d2f149"
+      ]
+    },
+    {
+      "address": "0x92815b16a0563271dcf34ba6597123c136b671f7",
+      "leaf": "0x0x672feb6faaad8bd739801673b5b2e9ba4c4ba915a28dd234f794efd0fb65c56f",
+      "proof": [
+        "0x2fbb59927b1a068cc92ff52b3541d6ec6e207b44007ba49b204b1e1b093fca05",
+        "0x47006626bec6ce6a45435fd026c849f64fb6da85feef6bfb3388cea5d15ba930",
+        "0xdd435c2ade0fe5983318ad141e455b8033e1280c3cd0876416d85512a2d2f149"
+      ]
+    },
+    {
+      "address": "0x5d2614e0630aa8a556d16bce96e78eaf08098021",
+      "leaf": "0x0x1bf826fff31bf40c6ff81d80a5277c714ad2b2b7bfa438336772956d2397b48c",
+      "proof": [
+        "0x3d9a5659c5be7f9c8c249f84efb7ae795053983a7eff245ab918d9783d5d178d",
+        "0xb18200a55cf3a11a88676f28f045bda505d25cc5e309e14d76c5501d74b3e51b",
+        "0xdd435c2ade0fe5983318ad141e455b8033e1280c3cd0876416d85512a2d2f149"
+      ]
+    },
+    {
+      "address": "0x7dfb98ac2167b16f667ad8ee3730cff849016a0f",
+      "leaf": "0x0x3d9a5659c5be7f9c8c249f84efb7ae795053983a7eff245ab918d9783d5d178d",
+      "proof": [
+        "0x1bf826fff31bf40c6ff81d80a5277c714ad2b2b7bfa438336772956d2397b48c",
+        "0xb18200a55cf3a11a88676f28f045bda505d25cc5e309e14d76c5501d74b3e51b",
+        "0xdd435c2ade0fe5983318ad141e455b8033e1280c3cd0876416d85512a2d2f149"
+      ]
+    },
+    {
+      "address": "0x3a2D49d9282227a653c1A92b13E9742ad65Bba54",
+      "leaf": "0x0xe22fc0ccce7470de1c962d50afd5fcb9f74cc13c97e80355d41b0d049f37707d",
+      "proof": [
+        "0x378e9f1a41c1e56c617e984522f13abd199f675a5a26bc31ff0e92ac56ea42b4",
+        "0x820760fbade66e013e3a1a151425456bcede0b06c3a2e8f8ba0c895d4fa1f343"
+      ]
+    },
+    {
+      "address": "0x659c1E1D008b174CcE2Cf22632aaB1add333Dc50",
+      "leaf": "0x0x378e9f1a41c1e56c617e984522f13abd199f675a5a26bc31ff0e92ac56ea42b4",
+      "proof": [
+        "0xe22fc0ccce7470de1c962d50afd5fcb9f74cc13c97e80355d41b0d049f37707d",
+        "0x820760fbade66e013e3a1a151425456bcede0b06c3a2e8f8ba0c895d4fa1f343"
+      ]
+    }
+  ]
+}

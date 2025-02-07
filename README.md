@@ -14,3 +14,13 @@ After installing the above, you can run the following commands to build the proj
 yarn install
 npx hardhat compile
 ```
+
+## Contracts
+
+### MimBokuNFT
+
+This contract is an ERC721 standard contract.
+
+### MimbokuMultiround
+
+This is the main contract that will be used to mint the NFTs,

@@ -466,7 +466,7 @@
       ]
     },
     "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/interfaces/draft-IERC6093.sol": {
-      "lastModificationDate": 1738930290947,
+      "lastModificationDate": 1738988547179,
       "contentHash": "267d92fe4de67b1bdb3302c08f387dbf",
       "sourceName": "@openzeppelin/contracts/interfaces/draft-IERC6093.sol",
       "solcConfig": {
@@ -555,6 +555,51 @@
         "IERC721"
       ]
     },
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
+      "lastModificationDate": 1738901011001,
+      "contentHash": "12c206f185cb951213799561fdcaa40d",
+      "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol",
+      "solcConfig": {
+        "version": "0.8.26",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "../IERC721.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "IERC721Metadata"
+      ]
+    },
     "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Utils.sol": {
       "lastModificationDate": 1738988547409,
       "contentHash": "f4b67273e290784d0e155f004ae52f0b",
@@ -601,51 +646,6 @@
         "ERC721Utils"
       ]
     },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
-      "lastModificationDate": 1738901011001,
-      "contentHash": "12c206f185cb951213799561fdcaa40d",
-      "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol",
-      "solcConfig": {
-        "version": "0.8.26",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "../IERC721.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "IERC721Metadata"
-      ]
-    },
     "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/utils/math/SafeCast.sol": {
       "lastModificationDate": 1738901010281,
       "contentHash": "2adca1150f58fc6f3d1f0a0f22ee7cca",
@@ -687,51 +687,6 @@
       ],
       "artifacts": [
         "SafeCast"
-      ]
-    },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/utils/math/SignedMath.sol": {
-      "lastModificationDate": 1738901010281,
-      "contentHash": "ae3528afb8bdb0a7dcfba5b115ee8074",
-      "sourceName": "@openzeppelin/contracts/utils/math/SignedMath.sol",
-      "solcConfig": {
-        "version": "0.8.26",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "./SafeCast.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "SignedMath"
       ]
     },
     "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/utils/math/Math.sol": {
@@ -778,6 +733,51 @@
       ],
       "artifacts": [
         "Math"
+      ]
+    },
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/utils/math/SignedMath.sol": {
+      "lastModificationDate": 1738901010281,
+      "contentHash": "ae3528afb8bdb0a7dcfba5b115ee8074",
+      "sourceName": "@openzeppelin/contracts/utils/math/SignedMath.sol",
+      "solcConfig": {
+        "version": "0.8.26",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./SafeCast.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SignedMath"
       ]
     },
     "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/utils/Panic.sol": {
@@ -911,10 +911,10 @@
         "IERC721Enumerable"
       ]
     },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/interfaces/IERC165.sol": {
-      "lastModificationDate": 1738901009491,
-      "contentHash": "f808b485ee0cdc6768ee8385ae5f9a2a",
-      "sourceName": "@openzeppelin/contracts/interfaces/IERC165.sol",
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/modules/base/IModule.sol": {
+      "lastModificationDate": 1738988832839,
+      "contentHash": "f3dfe75a70f618d998fcee7f6b6735ed",
+      "sourceName": "@story-protocol/protocol-core/contracts/interfaces/modules/base/IModule.sol",
       "solcConfig": {
         "version": "0.8.26",
         "settings": {
@@ -947,62 +947,19 @@
         }
       },
       "imports": [
-        "../utils/introspection/IERC165.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": []
-    },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/modules/licensing/ILicenseTemplate.sol": {
-      "lastModificationDate": 1738901011411,
-      "contentHash": "8c5ea149c8d661d32aa8054f9cdba367",
-      "sourceName": "@storyprotocol/core/interfaces/modules/licensing/ILicenseTemplate.sol",
-      "solcConfig": {
-        "version": "0.8.26",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/interfaces/IERC165.sol"
+        "@openzeppelin/contracts/utils/introspection/IERC165.sol"
       ],
       "versionPragmas": [
         "0.8.26"
       ],
       "artifacts": [
-        "ILicenseTemplate"
+        "IModule"
       ]
     },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/modules/licensing/IPILicenseTemplate.sol": {
-      "lastModificationDate": 1738901011411,
-      "contentHash": "41f19087763b834a1dc621d2dafcf1f4",
-      "sourceName": "@storyprotocol/core/interfaces/modules/licensing/IPILicenseTemplate.sol",
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/modules/licensing/ILicensingModule.sol": {
+      "lastModificationDate": 1738988832849,
+      "contentHash": "bbbbbf7bcc6ea2f87117e5dff6b60f6c",
+      "sourceName": "@story-protocol/protocol-core/contracts/interfaces/modules/licensing/ILicensingModule.sol",
       "solcConfig": {
         "version": "0.8.26",
         "settings": {
@@ -1035,18 +992,62 @@
         }
       },
       "imports": [
-        "../../../interfaces/modules/licensing/ILicenseTemplate.sol"
+        "../base/IModule.sol",
+        "../../../lib/Licensing.sol"
       ],
       "versionPragmas": [
         "0.8.26"
       ],
       "artifacts": [
-        "IPILicenseTemplate"
+        "ILicensingModule"
+      ]
+    },
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/lib/Licensing.sol": {
+      "lastModificationDate": 1738988832809,
+      "contentHash": "fa00a06241bb915c35fb30b14cd050ca",
+      "sourceName": "@story-protocol/protocol-core/contracts/lib/Licensing.sol",
+      "solcConfig": {
+        "version": "0.8.26",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.26"
+      ],
+      "artifacts": [
+        "Licensing"
       ]
     },
     "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/contracts/MimbokuMultiround.sol": {
-      "lastModificationDate": 1739027790492,
-      "contentHash": "3e9aaaf4dab45bc3714ceb4f1bfa8b31",
+      "lastModificationDate": 1739035260741,
+      "contentHash": "fe1ada15737beb876fd54f106c4b8092",
       "sourceName": "contracts/MimbokuMultiround.sol",
       "solcConfig": {
         "version": "0.8.26",
@@ -1096,49 +1097,6 @@
       ],
       "artifacts": [
         "MimbokuMultiround"
-      ]
-    },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/contracts/interfaces/IOKXMultiMint.sol": {
-      "lastModificationDate": 1738899794621,
-      "contentHash": "f38604a2f3ada016a4fcf6b5558454ca",
-      "sourceName": "contracts/interfaces/IOKXMultiMint.sol",
-      "solcConfig": {
-        "version": "0.8.26",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.26"
-      ],
-      "artifacts": [
-        "IOKXMultiMint"
       ]
     },
     "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/contracts/interfaces/ISimpleERC721.sol": {
@@ -1229,10 +1187,10 @@
         "IMimbokuMultiround"
       ]
     },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
-      "lastModificationDate": 1738901010281,
-      "contentHash": "8f19f64d2adadf448840908bbaf431c8",
-      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/contracts/interfaces/IOKXMultiMint.sol": {
+      "lastModificationDate": 1738899794621,
+      "contentHash": "f38604a2f3ada016a4fcf6b5558454ca",
+      "sourceName": "contracts/interfaces/IOKXMultiMint.sol",
       "solcConfig": {
         "version": "0.8.26",
         "settings": {
@@ -1266,10 +1224,10 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.20"
+        "^0.8.26"
       ],
       "artifacts": [
-        "IERC20"
+        "IOKXMultiMint"
       ]
     },
     "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol": {
@@ -1317,6 +1275,139 @@
       ],
       "artifacts": [
         "EIP712Upgradeable"
+      ]
+    },
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1738901010281,
+      "contentHash": "8f19f64d2adadf448840908bbaf431c8",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.26",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/registries/IIPAssetRegistry.sol": {
+      "lastModificationDate": 1738988832839,
+      "contentHash": "158eb2145aa26c4ba8ddf2844efdc243",
+      "sourceName": "@story-protocol/protocol-core/contracts/interfaces/registries/IIPAssetRegistry.sol",
+      "solcConfig": {
+        "version": "0.8.26",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./IIPAccountRegistry.sol"
+      ],
+      "versionPragmas": [
+        "0.8.26"
+      ],
+      "artifacts": [
+        "IIPAssetRegistry"
+      ]
+    },
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/modules/metadata/ICoreMetadataModule.sol": {
+      "lastModificationDate": 1738988832839,
+      "contentHash": "d0c84a5845f1b988b01df8ecc8bbeb7b",
+      "sourceName": "@story-protocol/protocol-core/contracts/interfaces/modules/metadata/ICoreMetadataModule.sol",
+      "solcConfig": {
+        "version": "0.8.26",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "../../../../contracts/interfaces/modules/base/IModule.sol"
+      ],
+      "versionPragmas": [
+        "0.8.26"
+      ],
+      "artifacts": [
+        "ICoreMetadataModule"
       ]
     },
     "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/interfaces/IERC5267.sol": {
@@ -1407,8 +1498,51 @@
         "MessageHashUtils"
       ]
     },
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/registries/IIPAccountRegistry.sol": {
+      "lastModificationDate": 1738988832839,
+      "contentHash": "977e3f1837216740f44df72d581b6753",
+      "sourceName": "@story-protocol/protocol-core/contracts/interfaces/registries/IIPAccountRegistry.sol",
+      "solcConfig": {
+        "version": "0.8.26",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.26"
+      ],
+      "artifacts": [
+        "IIPAccountRegistry"
+      ]
+    },
     "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/contracts/utils/OKXMultiMint.sol": {
-      "lastModificationDate": 1738922387088,
+      "lastModificationDate": 1738928410257,
       "contentHash": "c14e18d0b54bcc774c98886ffc19c52f",
       "sourceName": "contracts/utils/OKXMultiMint.sol",
       "solcConfig": {
@@ -1585,273 +1719,6 @@
       ],
       "artifacts": [
         "Hashes"
-      ]
-    },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/modules/base/IModule.sol": {
-      "lastModificationDate": 1738988832839,
-      "contentHash": "f3dfe75a70f618d998fcee7f6b6735ed",
-      "sourceName": "@story-protocol/protocol-core/contracts/interfaces/modules/base/IModule.sol",
-      "solcConfig": {
-        "version": "0.8.26",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/utils/introspection/IERC165.sol"
-      ],
-      "versionPragmas": [
-        "0.8.26"
-      ],
-      "artifacts": [
-        "IModule"
-      ]
-    },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/modules/metadata/ICoreMetadataModule.sol": {
-      "lastModificationDate": 1738988832839,
-      "contentHash": "d0c84a5845f1b988b01df8ecc8bbeb7b",
-      "sourceName": "@story-protocol/protocol-core/contracts/interfaces/modules/metadata/ICoreMetadataModule.sol",
-      "solcConfig": {
-        "version": "0.8.26",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "../../../../contracts/interfaces/modules/base/IModule.sol"
-      ],
-      "versionPragmas": [
-        "0.8.26"
-      ],
-      "artifacts": [
-        "ICoreMetadataModule"
-      ]
-    },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/registries/IIPAssetRegistry.sol": {
-      "lastModificationDate": 1738988832839,
-      "contentHash": "158eb2145aa26c4ba8ddf2844efdc243",
-      "sourceName": "@story-protocol/protocol-core/contracts/interfaces/registries/IIPAssetRegistry.sol",
-      "solcConfig": {
-        "version": "0.8.26",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "./IIPAccountRegistry.sol"
-      ],
-      "versionPragmas": [
-        "0.8.26"
-      ],
-      "artifacts": [
-        "IIPAssetRegistry"
-      ]
-    },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/modules/licensing/ILicensingModule.sol": {
-      "lastModificationDate": 1738988832849,
-      "contentHash": "bbbbbf7bcc6ea2f87117e5dff6b60f6c",
-      "sourceName": "@story-protocol/protocol-core/contracts/interfaces/modules/licensing/ILicensingModule.sol",
-      "solcConfig": {
-        "version": "0.8.26",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "../base/IModule.sol",
-        "../../../lib/Licensing.sol"
-      ],
-      "versionPragmas": [
-        "0.8.26"
-      ],
-      "artifacts": [
-        "ILicensingModule"
-      ]
-    },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/interfaces/registries/IIPAccountRegistry.sol": {
-      "lastModificationDate": 1738988832839,
-      "contentHash": "977e3f1837216740f44df72d581b6753",
-      "sourceName": "@story-protocol/protocol-core/contracts/interfaces/registries/IIPAccountRegistry.sol",
-      "solcConfig": {
-        "version": "0.8.26",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "0.8.26"
-      ],
-      "artifacts": [
-        "IIPAccountRegistry"
-      ]
-    },
-    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@story-protocol/protocol-core/contracts/lib/Licensing.sol": {
-      "lastModificationDate": 1738988832809,
-      "contentHash": "fa00a06241bb915c35fb30b14cd050ca",
-      "sourceName": "@story-protocol/protocol-core/contracts/lib/Licensing.sol",
-      "solcConfig": {
-        "version": "0.8.26",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "0.8.26"
-      ],
-      "artifacts": [
-        "Licensing"
       ]
     }
   }

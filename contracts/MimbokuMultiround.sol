@@ -52,6 +52,9 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @notice Number of remaining token_id
     uint256 private remainingTokenIdCount;
 
+    /// @notice Number of pre-minted NFTs
+    uint256 public preMintedCount;
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -93,6 +96,22 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     //                               WRITE FUNCTIONS                                //
     //////////////////////////////////////////////////////////////////////////////////
 
+    /// @notice Set number of pre-minted NFTs
+    /// @param count The number of pre-minted NFTs
+    function setPreMintedCount(uint256 count) external onlyRole(OWNER_ROLE) {
+        // update new max supply
+        uint256 maxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+        maxSupply -= preMintedCount;
+        maxSupply += count;
+        this.setMaxSupply(maxSupply);
+
+        // update the remaining token_id count
+        remainingTokenIdCount = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+
+        // process the new pre-minted NFTs
+        _processNewPreMinted(count);
+    }
+
     /// @notice Updates the MULTIROUND_CONTRACT and the NFT_CONTRACT addresses.
     /// @param nftContract The new NFT contract address.
     /// @param multiRoundContract The new MultiRound contract address.
@@ -117,6 +136,9 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         remainingTokenIds = new uint256[](newMaxSupply); // Allocate storage
 
         remainingTokenIdCount = newMaxSupply;
+
+        // update the pre-minted count
+        _processNewPreMinted(preMintedCount);
     }
 
     /// @notice Configure or update the information of a certain round according to the stage
@@ -124,12 +146,19 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     function setStageMintInfo(IOKXMultiMint.StageMintInfo calldata stageMintInfo) external onlyRole(OWNER_ROLE) {
         IOKXMultiMint(MULTIROUND_CONTRACT).setStageMintInfo(stageMintInfo);
 
-        // update the remaining token_id list
+        // update the max supply
         uint256 maxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+        maxSupply += stageMintInfo.maxSupplyForStage;
+        this.setMaxSupply(maxSupply);
+
+        // update the remaining token_id list
         delete remainingTokenIds; // Clear storage before re-allocating
         remainingTokenIds = new uint256[](maxSupply); // Allocate storage
 
         remainingTokenIdCount = maxSupply;
+
+        // update the pre-minted count
+        _processNewPreMinted(preMintedCount);
     }
 
     /// @notice Configure or update the mint time for a specific stage.
@@ -144,7 +173,22 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @param stage Round identification.
     /// @param maxSupply nft maximum supply.
     function setStageMaxSupply(string calldata stage, uint32 maxSupply) external onlyRole(OWNER_ROLE) {
+        uint256 preMaxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
         IOKXMultiMint(MULTIROUND_CONTRACT).setStageMaxSupply(stage, maxSupply);
+
+        // update the max supply
+        uint256 newMaxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+        newMaxSupply -= preMaxSupply;
+        newMaxSupply += maxSupply;
+        this.setMaxSupply(newMaxSupply);
+
+        // update the remaining token_id list
+        delete remainingTokenIds; // Clear storage before re-allocating
+        remainingTokenIds = new uint256[](newMaxSupply); // Allocate storage
+        remainingTokenIdCount = newMaxSupply;
+
+        // update the pre-minted count
+        _processNewPreMinted(preMintedCount);
     }
 
     /// @notice Set payment information for a specific round based on the stage
@@ -317,6 +361,19 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         --remainingTokenIdCount;
 
         return tokenId;
+    }
+
+    /// @notice Process the new pre-minted NFTs.
+    /// @param count The number of pre-minted NFTs
+    function _processNewPreMinted(uint256 count) internal {
+        preMintedCount = count;
+
+        // update the remaining token_id list by swapping the last elements with the pre-minted token ids
+        for (uint256 i = 0; i < count; ++i) {
+            remainingTokenIds[i] = remainingTokenIdCount - i;
+        }
+
+        remainingTokenIdCount -= count;
     }
 
     /// @notice Mints a new token and registers as an IP asset.

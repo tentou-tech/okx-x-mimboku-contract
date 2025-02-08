@@ -3,16 +3,19 @@
 pragma solidity ^0.8.26;
 
 import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {EIP712Upgradeable} from "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {IDerivativeWorkflows} from
-    "@story-protocol/protocol-periphery-v1.3.0/contracts/interfaces/workflows/IDerivativeWorkflows.sol";
-import {WorkflowStructs} from "@story-protocol/protocol-periphery-v1.3.0/contracts/lib/WorkflowStructs.sol";
+import {IIPAssetRegistry} from "@story-protocol/protocol-core/contracts/interfaces/registries/IIPAssetRegistry.sol";
+import {ICoreMetadataModule} from
+    "@story-protocol/protocol-core/contracts/interfaces/modules/metadata/ICoreMetadataModule.sol";
+import {ILicensingModule} from
+    "@story-protocol/protocol-core/contracts/interfaces/modules/licensing/ILicensingModule.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ISimpleERC721} from "./interfaces/ISimpleERC721.sol";
 import {IMimbokuMultiround} from "./interfaces/IMimbokuMultiround.sol";
 import {IOKXMultiMint} from "./interfaces/IOKXMultiMint.sol";
 
-contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUpgradeable {
+contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeable, AccessControlUpgradeable {
     bytes32 public constant OWNER_ROLE = keccak256("OWNER_ROLE");
 
     /// We need a NFT contract to mint NFTs
@@ -27,8 +30,14 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
     /// @notice Story Proof-of-Creativity PILicense Template address.
     address public PIL_TEMPLATE;
 
-    /// @notice The DerivativeWorkflows contract address.
-    address public DERIVATIVE_WORKFLOWS;
+    /// @notice The IP Asset Registry contract address.
+    address public IP_ASSET_REGISTRY;
+
+    /// @notice The Core Metadata Module contract address.
+    address public CORE_METADATA_MODULE;
+
+    /// @notice The Licensing Module contract address.
+    address public LICENSING_MODULE;
 
     /// @notice Root NFT
     RootNFT public rootNFT;
@@ -55,6 +64,8 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
         address multiRoundContract,
         IPMetadata calldata ipMetadata
     ) public initializer {
+        __EIP712_init("OKXMint", "1.0");
+
         __AccessControl_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
@@ -71,8 +82,9 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
 
         DEFAULT_LICENSE_TERMS_ID = ipMetadata.defaultLicenseTermsId;
         PIL_TEMPLATE = ipMetadata.pilTemplate;
-        DERIVATIVE_WORKFLOWS = ipMetadata.derivativeWorkflows;
-
+        IP_ASSET_REGISTRY = ipMetadata.ipAssetRegistry;
+        CORE_METADATA_MODULE = ipMetadata.coreMetadataModule;
+        LICENSING_MODULE = ipMetadata.licenseModule;
         ipMetadataURI = ipMetadata.ipMetadataURI;
         ipMetadataHash = ipMetadata.ipMetadataHash;
     }
@@ -280,29 +292,16 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
         parentIpIds[0] = rootNFT.ipId;
         licenseTermsIds[0] = DEFAULT_LICENSE_TERMS_ID;
 
-        // register and make derivative IP
-        ipId = IDerivativeWorkflows(DERIVATIVE_WORKFLOWS).registerIpAndMakeDerivative(
-            NFT_CONTRACT,
-            tokenId,
-            WorkflowStructs.MakeDerivative({
-                parentIpIds: parentIpIds,
-                licenseTemplate: PIL_TEMPLATE,
-                licenseTermsIds: licenseTermsIds,
-                royaltyContext: "",
-                maxMintingFee: 0,
-                maxRts: 0,
-                maxRevenueShare: 0
-            }),
-            WorkflowStructs.IPMetadata({
-                ipMetadataURI: ipMetadataURI,
-                ipMetadataHash: ipMetadataHash,
-                nftMetadataURI: "", // this parameter is token URI, but seen `nftMetadataHash` is not used in the function, so let it be empty
-                nftMetadataHash: "" // this parameter must be passed through the mint function, otherwise let it be empty
-            }),
-            WorkflowStructs.SignatureData({signer: address(0), deadline: 0, signature: new bytes(0)})
-        );
+        // register IP
+        // TODO: ip metadata hash following the tokenID?
+        ipId = _registerIp(tokenId, ipMetadataHash);
+
+        // make derivative
+        // TODO: add royalty context
+        _makeDerivative(ipId, parentIpIds, PIL_TEMPLATE, licenseTermsIds, "", 0, 0, 0);
     }
 
+    /// @notice Get a random token ID from the remaining token IDs.
     function _getRandomId() internal returns (uint256) {
         uint256 rand =
             uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, msg.sender))) % remainingTokenIdCount;
@@ -318,5 +317,52 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
         --remainingTokenIdCount;
 
         return tokenId;
+    }
+
+    /// @notice Mints a new token and registers as an IP asset.
+    /// @param tokenId The ID of the minted token.
+    /// @param nftMetadataHash The hash of the metadata for the IP NFT.
+    /// @return ipId The ID of the newly created IP.
+    function _registerIp(uint256 tokenId, bytes32 nftMetadataHash) internal returns (address ipId) {
+        ipId = IIPAssetRegistry(IP_ASSET_REGISTRY).register(block.chainid, NFT_CONTRACT, tokenId);
+
+        // set the IP metadata if they are not empty
+        if (
+            keccak256(abi.encodePacked(ipMetadataURI)) != keccak256("") || ipMetadataHash != bytes32(0)
+                || nftMetadataHash != bytes32(0)
+        ) {
+            ICoreMetadataModule(CORE_METADATA_MODULE).setAll(ipId, ipMetadataURI, ipMetadataHash, nftMetadataHash);
+        }
+    }
+
+    /// @notice Register `ipId` as a derivative of `parentIpIds` under `licenseTemplate` with `licenseTermsIds`.
+    /// @param ipId The ID of the IP to be registered as a derivative.
+    /// @param parentIpIds The IDs of the parent IPs.
+    /// @param licenseTemplate The address of the license template.
+    /// @param licenseTermsIds The IDs of the license terms.
+    /// @param royaltyContext The royalty context, should be empty for Royalty Policy LAP.
+    /// @param maxMintingFee The maximum minting fee that the caller is willing to pay. if set to 0 then no limit.
+    /// @param maxRts The maximum number of royalty tokens that can be distributed to the external royalty policies.
+    /// @param maxRevenueShare The maximum revenue share percentage allowed for minting the License Tokens.
+    function _makeDerivative(
+        address ipId,
+        address[] memory parentIpIds,
+        address licenseTemplate,
+        uint256[] memory licenseTermsIds,
+        bytes memory royaltyContext,
+        uint256 maxMintingFee,
+        uint32 maxRts,
+        uint32 maxRevenueShare
+    ) internal {
+        ILicensingModule(LICENSING_MODULE).registerDerivative({
+            childIpId: ipId,
+            parentIpIds: parentIpIds,
+            licenseTermsIds: licenseTermsIds,
+            licenseTemplate: licenseTemplate,
+            royaltyContext: royaltyContext,
+            maxMintingFee: maxMintingFee,
+            maxRts: maxRts,
+            maxRevenueShare: maxRevenueShare
+        });
     }
 }

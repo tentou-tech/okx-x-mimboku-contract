@@ -25,11 +25,11 @@
     "hardhat-gas-reporter": "^2.2.2",
     "merkletreejs": "^0.4.1",
     "solidity-coverage": "^0.8.14",
-    "typechain": "^8.3.2"
+    "typechain": "^8.3.2",
+    "web3": "^4.16.0"
   },
   "devDependencies": {
-    "@story-protocol/protocol-core-v1.2.3": "github:storyprotocol/protocol-core-v1#58f023c",
-    "@story-protocol/protocol-core-v1.3.0": "github:storyprotocol/protocol-core-v1#3ef2a99",
-    "@story-protocol/protocol-periphery-v1.3.0": "github:storyprotocol/protocol-periphery-v1#ea88959"
+    "@story-protocol/protocol-core": "github:storyprotocol/protocol-core-v1#a0cddb1",
+    "@story-protocol/protocol-periphery": "github:storyprotocol/protocol-periphery-v1#ea88959"
   }
 }

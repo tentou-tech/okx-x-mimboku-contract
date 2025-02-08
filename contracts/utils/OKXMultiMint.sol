@@ -9,7 +9,7 @@ import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {IOKXMultiMint} from "../interfaces/IOKXMultiMint.sol";
 
 /// @custom:security-contact mr.nmh175@gmail.com
-abstract contract OkxMultiRound is IOKXMultiMint, EIP712Upgradeable, AccessControlUpgradeable {
+contract OKXMultiMint is IOKXMultiMint, EIP712Upgradeable, AccessControlUpgradeable {
     bytes32 public constant OWNER_CONTRACT = keccak256("OWNER_CONTRACT");
 
     bytes32 public constant MINT_AUTH_TYPE_HASH =
@@ -27,10 +27,12 @@ abstract contract OkxMultiRound is IOKXMultiMint, EIP712Upgradeable, AccessContr
         _disableInitializers();
     }
 
-    // TODO: Init all parameters in the initialize function
-    function initialize(address owner, address _signer) public initializer {
+    function initialize(address defaultAdmin, address owner, address _signer) public initializer {
         __EIP712_init("OKXMint", "1.0");
 
+        __AccessControl_init();
+
+        _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
         _grantRole(OWNER_CONTRACT, owner);
 
         signer = _signer;

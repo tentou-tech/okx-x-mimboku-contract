@@ -7,11 +7,11 @@ import {IOKXMultiMint} from "./IOKXMultiMint.sol";
 /// @notice A Story NFT is a soulbound NFT that has an unified token URI for all tokens.
 interface IMimbokuMultiround {
     /// @dev Structure for the root IP
-    /// @param contract_address The root NFT contract address.
+    /// @param contractAddress The root NFT contract address.
     /// @param tokenId The root NFT token ID.
     /// @param ipId The root IP ID.
     struct RootNFT {
-        address contract_address;
+        address contractAddress;
         uint256 tokenId;
         address ipId;
     }
@@ -23,7 +23,9 @@ interface IMimbokuMultiround {
         RootNFT rootNFT;
         uint256 defaultLicenseTermsId;
         address pilTemplate;
-        address derivativeWorkflows;
+        address ipAssetRegistry;
+        address coreMetadataModule;
+        address licenseModule;
         string ipMetadataURI;
         bytes32 ipMetadataHash;
     }

@@ -36,7 +36,7 @@ contract MimBokuNFT is Initializable, ERC721Upgradeable, ERC721EnumerableUpgrade
     }
 
     function safeMint(address to, uint256 tokenId) public onlyRole(MINTER_ROLE) {
-        _safeMint(to, tokenId);
+        _mint(to, tokenId);
     }
 
     function setTokenURI(string calldata baseURI_) public onlyRole(DEFAULT_ADMIN_ROLE) {

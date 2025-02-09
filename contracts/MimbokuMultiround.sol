@@ -55,6 +55,9 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @notice Number of pre-minted NFTs
     uint256 public preMintedCount;
 
+    /// @notice Last minted token ID
+    uint256 public lastMintedTokenId;
+
     /// @notice This flag is used for testing purposes due to the IP workflows contracts deployment.
     /// @dev This flag is false by default. It should be set to true only when testing.
     /// @dev This flag will disable the IP registration and derivative creation.
@@ -108,7 +111,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         uint256 maxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
         maxSupply -= preMintedCount;
         maxSupply += count;
-        this.setMaxSupply(maxSupply);
+        _setMaxSupply(maxSupply);
 
         // update the remaining token_id count
         remainingTokenIdCount = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
@@ -134,7 +137,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @notice Configure or update the maximum number of nfts that can be minted.
     /// @param newMaxSupply The new maximum number of nfts that can be minted.
     function setMaxSupply(uint256 newMaxSupply) external onlyRole(OWNER_ROLE) {
-        IOKXMultiMint(MULTIROUND_CONTRACT).setMaxSupply(newMaxSupply);
+        _setMaxSupply(newMaxSupply);
 
         // update the remaining token_id list
         delete remainingTokenIds; // Clear storage before re-allocating
@@ -153,8 +156,6 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
 
         // update the max supply
         uint256 maxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
-        maxSupply += stageMintInfo.maxSupplyForStage;
-        this.setMaxSupply(maxSupply);
 
         // update the remaining token_id list
         delete remainingTokenIds; // Clear storage before re-allocating
@@ -185,7 +186,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         uint256 newMaxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
         newMaxSupply -= preMaxSupply;
         newMaxSupply += maxSupply;
-        this.setMaxSupply(newMaxSupply);
+        _setMaxSupply(newMaxSupply);
 
         // update the remaining token_id list
         delete remainingTokenIds; // Clear storage before re-allocating
@@ -291,6 +292,8 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
 
             // Transfer NFT to the recipient
             ISimpleERC721(NFT_CONTRACT).transferFrom(address(this), mintparams.to, tokenId);
+
+            lastMintedTokenId = tokenId;
         }
 
         emit NFTMinted(mintparams.to, tokenId, ipId);
@@ -330,9 +333,18 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         return IOKXMultiMint(MULTIROUND_CONTRACT).stageToMint(stage);
     }
 
+    /// @notice Query the maximum number of nfts that can be minted
+    function maxSupply() external view returns (uint256) {
+        return IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+    }
+
     //////////////////////////////////////////////////////////////////////////////////
     //                             Internal functions                               //
     //////////////////////////////////////////////////////////////////////////////////
+
+    function _setMaxSupply(uint256 newMaxSupply) internal {
+        IOKXMultiMint(MULTIROUND_CONTRACT).setMaxSupply(newMaxSupply);
+    }
 
     /// @notice Mints an NFT to the contract itself.
     /// @return tokenId The token ID of the minted NFT.
@@ -431,9 +443,9 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
             parentIpIds: parentIpIds,
             licenseTermsIds: licenseTermsIds,
             licenseTemplate: licenseTemplate,
-            royaltyContext: royaltyContext,
-            maxMintingFee: maxMintingFee
+            royaltyContext: royaltyContext
         });
+        // maxMintingFee: maxMintingFee
         // maxRts: maxRts,
         // maxRevenueShare: maxRevenueShare
     }

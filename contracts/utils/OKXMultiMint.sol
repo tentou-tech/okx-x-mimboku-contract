@@ -327,6 +327,11 @@ contract OKXMultiMint is IOKXMultiMint, EIP712Upgradeable, AccessControlUpgradea
         }
     }
 
+    /// @notice Function for pre-minted NFTs.
+    function increaseTotalMintedAmount() external onlyRole(OWNER_CONTRACT) {
+        ++totalMintedAmount;
+    }
+
     function _cast(bool b) internal pure returns (uint256 u) {
         assembly {
             u := b

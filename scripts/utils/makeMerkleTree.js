@@ -5,6 +5,8 @@ const fs = require("fs");
 
 //hardhat local node addresses from 0 to 3
 const address = [
+  "0x95c2E9FA2A2834CB624361010fA91B038270F4BD",
+  "0xc173bB17b5D2C7BCEd8a6f50E6F9c1bD6bde48DD",
   "0xe5a325ef78660df15b367d2f0e2469b4361c9884",
   "0x92815b16a0563271dcf34ba6597123c136b671f7",
   "0x5d2614e0630aa8a556d16bce96e78eaf08098021",

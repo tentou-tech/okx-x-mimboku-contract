@@ -288,7 +288,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
 
         for (uint256 i = 0; i < amount; ++i) {
             // Mint NFt to the contract itself and register it as an IP
-            (tokenId, ipId) = _mintToSelf();
+            (tokenId, ipId) = _mintToSelf(0);
 
             // Transfer NFT to the recipient
             ISimpleERC721(NFT_CONTRACT).transferFrom(address(this), mintparams.to, tokenId);
@@ -297,6 +297,25 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         }
 
         emit NFTMinted(mintparams.to, tokenId, ipId);
+    }
+
+    /// @notice Pre-Mints a NFT with specified tokenID for the given recipient, registers it as an IP,
+    ///         and makes it a derivative of the organization IP.
+    /// @param to The recipient of the minted NFT.
+    /// @param tokenId_ The token ID of the minted NFT.
+    function preMint(address to, uint256 tokenId_) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address ipId) {
+        require(tokenId_ != 0 && tokenId_ <= preMintedCount, "Invalid token ID");
+        // increase the total minted nft
+        IOKXMultiMint(MULTIROUND_CONTRACT).increaseTotalMintedAmount();
+
+        // Mint NFt to the contract itself and register it as an IP
+        uint256 tokenId = 0;
+        (tokenId, ipId) = _mintToSelf(tokenId_);
+
+        // Transfer NFT to the recipient
+        ISimpleERC721(NFT_CONTRACT).transferFrom(address(this), to, tokenId_);
+
+        emit NFTMinted(to, tokenId_, ipId);
     }
 
     /// @notice Enable the test mode.
@@ -349,8 +368,12 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @notice Mints an NFT to the contract itself.
     /// @return tokenId The token ID of the minted NFT.
     /// @return ipId The IP ID of the minted NFT.
-    function _mintToSelf() internal returns (uint256 tokenId, address ipId) {
-        tokenId = _getRandomId();
+    function _mintToSelf(uint256 expectedTokenId) internal returns (uint256 tokenId, address ipId) {
+        if (expectedTokenId != 0) {
+            tokenId = expectedTokenId;
+        } else {
+            tokenId = _getRandomId();
+        }
 
         ISimpleERC721(NFT_CONTRACT).safeMint(address(this), tokenId);
 

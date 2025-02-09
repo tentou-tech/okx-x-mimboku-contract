@@ -55,6 +55,11 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @notice Number of pre-minted NFTs
     uint256 public preMintedCount;
 
+    /// @notice This flag is used for testing purposes due to the IP workflows contracts deployment.
+    /// @dev This flag is false by default. It should be set to true only when testing.
+    /// @dev This flag will disable the IP registration and derivative creation.
+    bool public isTest;
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -291,6 +296,12 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         emit NFTMinted(mintparams.to, tokenId, ipId);
     }
 
+    /// @notice Enable the test mode.
+    /// @param isTest_ Whether to enable the test mode.
+    function enableTestMode(bool isTest_) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        isTest = isTest_;
+    }
+
     //////////////////////////////////////////////////////////////////////////////////
     //                               READ FUNCTIONS                                 //
     //////////////////////////////////////////////////////////////////////////////////
@@ -336,13 +347,17 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         parentIpIds[0] = rootNFT.ipId;
         licenseTermsIds[0] = DEFAULT_LICENSE_TERMS_ID;
 
-        // register IP
-        // TODO: ip metadata hash following the tokenID?
-        ipId = _registerIp(tokenId, ipMetadataHash);
+        if (!isTest) {
+            // register IP
+            // TODO: ip metadata hash following the tokenID?
+            ipId = _registerIp(tokenId, ipMetadataHash);
 
-        // make derivative
-        // TODO: add royalty context
-        _makeDerivative(ipId, parentIpIds, PIL_TEMPLATE, licenseTermsIds, "", 0, 0, 0);
+            // make derivative
+            // TODO: add royalty context
+            _makeDerivative(ipId, parentIpIds, PIL_TEMPLATE, licenseTermsIds, "", 0, 0, 0);
+        } else {
+            return (tokenId, address(0));
+        }
     }
 
     /// @notice Get a random token ID from the remaining token IDs.

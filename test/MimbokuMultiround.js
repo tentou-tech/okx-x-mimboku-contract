@@ -4,7 +4,7 @@ const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 
 const { expect } = chai;
-const { hre, ethers, upgrades } = require("hardhat");
+const { hardhat, ethers, upgrades } = require("hardhat");
 
 const ten18 = BigInt("1000000000000000000");
 
@@ -56,30 +56,25 @@ describe("MimbokuMultiround contract", () => {
         iPMetadata,
       ]
     );
-    //      MIMBOKU_MULTI_ROUND.deployProxy(
-    //   mimbokuMultiRound_defaultAdmin,
-    //   mimbokuMultiRound_owner,
-    //   mimbokuMultiRound_templateNft,
-    //   mimbokuMultiRound_multiRoundContract,
-    //   iPMetadata
-    // );
-    contracts.mimbokuNft = await MIMBOKU_NFT.deployProxy(
+
+    contracts.mimbokuNft = await upgrades.deployProxy(MIMBOKU_NFT, [
       mimbokuMultiRound_defaultAdmin,
-      contracts.mimbokuMultiRound.address,
+      contracts.mimbokuMultiRound.target,
       "Just for test",
       "JFT",
-      "ipfs://tokenURI.com"
-    );
-    contracts.okxMultiMint = await OKX_MULTI_MINT.deployProxy(
+      "ipfs://tokenURI.com",
+    ]);
+
+    contracts.okxMultiMint = await upgrades.deployProxy(OKX_MULTI_MINT, [
       mimbokuMultiRound_defaultAdmin,
-      contracts.mimbokuMultiRound.address,
-      signer
-    );
+      contracts.mimbokuMultiRound.target,
+      signer.address,
+    ]);
 
     // re-update contracts for MimbokuMultiround
     await contracts.mimbokuMultiRound.setContracts(
-      contracts.mimbokuNft.address,
-      contracts.okxMultiMint.address
+      contracts.mimbokuNft.target,
+      contracts.okxMultiMint.target
     );
 
     contracts.defaultAdmin = {
@@ -104,130 +99,27 @@ describe("MimbokuMultiround contract", () => {
     it("1. Show correct NFT address", async () => {
       return expect(
         await contracts.mimbokuMultiRound.NFT_CONTRACT()
-      ).to.be.equal(contracts.mimbokuNft.address);
+      ).to.be.equal(contracts.mimbokuNft.target);
+    });
+
+    it("2. The testing flag is false", async () => {
+      return expect(await contracts.mimbokuMultiRound.isTest()).to.be.equal(
+        false
+      );
+    });
+
+    it("3. Set testing flag to true", async () => {
+      // The owner cannot set the test flag to true
+      await expect(
+        contracts.owner.mimbokuMultiRound.enableTestMode(true)
+      ).eventually.to.be.rejectedWith("AccessControlUnauthorizedAccount");
+
+      // The default admin can set the test flag to true
+      await contracts.defaultAdmin.mimbokuMultiRound.enableTestMode(true);
+
+      return expect(await contracts.mimbokuMultiRound.isTest()).to.be.equal(
+        true
+      );
     });
   });
-
-  //   describe("Mint and transfer SFT", () => {
-  //     it("1. All token belong to owner", async () => {
-  //       const mintedAmount = BigInt("10000000000") * ten18;
-
-  //       const ownerBalance = await contracts.shf.balanceOf(owner.address);
-
-  //       return expect(ownerBalance).to.be.equal(mintedAmount);
-  //     });
-
-  //     it("2. Transfer token from owner to address susccess", async () => {
-  //       const transferAmount = BigInt("5000") * ten18;
-
-  //       await contracts.shf.transfer(user1.address, transferAmount);
-
-  //       const balance = await contracts.shf.balanceOf(user1.address);
-
-  //       return expect(transferAmount).to.be.equal(balance);
-  //     });
-
-  //     it("3. Cannot transfer token from user to another user", async () => {
-  //       const transferAmount = BigInt("2000") * ten18;
-
-  //       return expect(
-  //         contracts.user1.shf.transfer(user2.address, transferAmount)
-  //       ).eventually.to.be.rejectedWith(
-  //         "ShibaFriend: sender or receiver not allowed"
-  //       );
-  //     });
-  //   });
-
-  //   describe("Config and transer from user to contract", () => {
-  //     it("1. Cannot config allow send or receive address because not admin", async () => {
-  //       expect(contracts.user1.shf.allowReceiveAddress(user2.address)).eventually
-  //         .to.be.rejected;
-
-  //       return expect(contracts.user1.shf.allowSendAddress(user2.address))
-  //         .eventually.to.be.rejected;
-  //     });
-
-  //     it("2. User cannot send or receive because unauthorized", async () => {
-  //       const transferAmount = BigInt("500") * ten18;
-
-  //       return expect(contracts.user2.shf.transfer(user3.address, transferAmount))
-  //         .eventually.to.be.rejected;
-  //     });
-  //   });
-
-  //   describe("A normal token contract with blacklisted", () => {
-  //     it("0. Allow wallets transfer", async () => {
-  //       await contracts.owner.shf.allowWalletTransfer();
-  //     });
-
-  //     it("1. Wallets can transfer normally", async () => {
-  //       const transferAmountBig = BigInt("300000") * ten18;
-
-  //       expect(
-  //         contracts.user1.shf.transfer(user2.address, transferAmountBig)
-  //       ).eventually.to.be.rejectedWith("ERC20: transfer amount exceeds balance");
-
-  //       const transferAmount1 = BigInt("3000") * ten18;
-
-  //       await contracts.user1.shf.transfer(user2.address, transferAmount1);
-
-  //       const balance1 = await contracts.shf.balanceOf(user2.address);
-
-  //       expect(transferAmount1).to.be.equal(balance1);
-
-  //       const transferAmount2 = BigInt("1000") * ten18;
-
-  //       await contracts.user2.shf.transfer(user3.address, transferAmount2);
-
-  //       const balance2 = await contracts.shf.balanceOf(user3.address);
-
-  //       return expect(transferAmount2).to.be.equal(balance2);
-  //     });
-
-  //     it("2. Admin can blacklisted a wallet", async () => {
-  //       const balanceUser2 = await contracts.shf.balanceOf(user2.address);
-
-  //       expect(balanceUser2).to.be.equal(BigInt("2000") * ten18);
-
-  //       await contracts.owner.shf.blacklistAddress(user2.address);
-
-  //       const balanceUser2After = await contracts.shf.balanceOf(user2.address);
-
-  //       expect(balanceUser2After).to.be.equal(BigInt("0") * ten18);
-
-  //       const transferAmount2 = BigInt("1000") * ten18;
-
-  //       const blackListed = await contracts.owner.shf.getBlackListedAddress();
-
-  //       expect(blackListed[0]).to.be.equal(user2.address);
-
-  //       return expect(
-  //         contracts.user2.shf.transfer(user3.address, transferAmount2)
-  //       ).eventually.to.be.rejectedWith(
-  //         "ShibaFriend: sender or receiver is blacklisted"
-  //       );
-  //     });
-
-  //     it("3. Admin can unblacklisted a wallet", async () => {
-  //       await contracts.owner.shf.unBlacklistAddress(user2.address);
-
-  //       const balanceUser2 = await contracts.shf.balanceOf(user2.address);
-
-  //       expect(balanceUser2).to.be.equal(BigInt("2000") * ten18);
-
-  //       const blackListed = await contracts.owner.shf.getBlackListedAddress();
-
-  //       let length = blackListed.length;
-
-  //       expect(length).to.be.equal(0);
-
-  //       const transferAmount2 = BigInt("1000") * ten18;
-
-  //       await contracts.user2.shf.transfer(user3.address, transferAmount2);
-
-  //       const balance2 = await contracts.shf.balanceOf(user3.address);
-
-  //       return expect(balance2).to.be.equal(BigInt("2000") * ten18);
-  //     });
-  //   });
 });

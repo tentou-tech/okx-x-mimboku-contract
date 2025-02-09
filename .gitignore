@@ -134,3 +134,5 @@ cache
 artifacts
 
 .secret
+
+./scripts/utils/mint.js

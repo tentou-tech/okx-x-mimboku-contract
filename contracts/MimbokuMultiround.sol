@@ -432,9 +432,9 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
             licenseTermsIds: licenseTermsIds,
             licenseTemplate: licenseTemplate,
             royaltyContext: royaltyContext,
-            maxMintingFee: maxMintingFee,
-            maxRts: maxRts,
-            maxRevenueShare: maxRevenueShare
+            maxMintingFee: maxMintingFee
         });
+        // maxRts: maxRts,
+        // maxRevenueShare: maxRevenueShare
     }
 }

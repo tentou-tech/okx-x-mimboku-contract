@@ -23,6 +23,7 @@ contract OKXMultiMint is IOKXMultiMint, EIP712Upgradeable, AccessControlUpgradea
     uint256 private totalMaxSupply; // Maximum supply of the NFTs of all stages.
     uint256 public totalMintedAmount;
 
+    /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }

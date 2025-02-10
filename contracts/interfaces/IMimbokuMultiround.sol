@@ -8,12 +8,13 @@ import {IOKXMultiMint} from "./IOKXMultiMint.sol";
 interface IMimbokuMultiround {
     /// @dev Structure for the root IP
     /// @param contractAddress The root NFT contract address.
-    /// @param tokenId The root NFT token ID.
+    /// @param tokenIds The root NFT token ID.
     /// @param ipId The root IP ID.
     struct RootNFT {
         address contractAddress;
-        uint256 tokenId;
-        address ipId;
+        uint256[] tokenIds;
+        address[] ipIds;
+        uint256[] licenseTermsIds;
     }
 
     /// @dev Structure for the initial contract IP parameters
@@ -21,7 +22,6 @@ interface IMimbokuMultiround {
     /// @param ipMetadataHash The hash of the metadata for all IP from this collection.
     struct IPMetadata {
         RootNFT rootNFT;
-        uint256 defaultLicenseTermsId;
         address pilTemplate;
         address ipAssetRegistry;
         address coreMetadataModule;

@@ -159,6 +159,9 @@ interface IOKXMultiMint {
     /// @param endTime End time.
     function setTransferRestricted(bool isTransferRestricted_, uint64 startTime, uint64 endTime) external;
 
+    /// @notice Function for pre-minted NFTs.
+    function increaseTotalMintedAmount() external;
+
     //////////////////////////////////////////////////////////////////////////////////
     //                               READ FUNCTIONS                                 //
     //////////////////////////////////////////////////////////////////////////////////

@@ -24,9 +24,6 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// We need a MultiRound contract to manage rounds
     address public MULTIROUND_CONTRACT;
 
-    /// @notice The default license terms ID.
-    uint256 public DEFAULT_LICENSE_TERMS_ID;
-
     /// @notice Story Proof-of-Creativity PILicense Template address.
     address public PIL_TEMPLATE;
 
@@ -55,10 +52,13 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @notice Number of pre-minted NFTs
     uint256 public preMintedCount;
 
-    /// @notice This flag is used for testing purposes due to the IP workflows contracts deployment.
-    /// @dev This flag is false by default. It should be set to true only when testing.
-    /// @dev This flag will disable the IP registration and derivative creation.
-    bool public isTest;
+    /// @notice Last minted token ID
+    uint256 public lastMintedTokenId;
+
+    // /// @notice This flag is used for testing purposes due to the IP workflows contracts deployment.
+    // /// @dev This flag is false by default. It should be set to true only when testing.
+    // /// @dev This flag will disable the IP registration and derivative creation.
+    // bool public isTest;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -88,7 +88,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         // The ip metadata
         rootNFT = ipMetadata.rootNFT;
 
-        DEFAULT_LICENSE_TERMS_ID = ipMetadata.defaultLicenseTermsId;
+        // DEFAULT_LICENSE_TERMS_ID = ipMetadata.defaultLicenseTermsId;
         PIL_TEMPLATE = ipMetadata.pilTemplate;
         IP_ASSET_REGISTRY = ipMetadata.ipAssetRegistry;
         CORE_METADATA_MODULE = ipMetadata.coreMetadataModule;
@@ -105,10 +105,10 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @param count The number of pre-minted NFTs
     function setPreMintedCount(uint256 count) external onlyRole(OWNER_ROLE) {
         // update new max supply
-        uint256 maxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
-        maxSupply -= preMintedCount;
-        maxSupply += count;
-        this.setMaxSupply(maxSupply);
+        uint256 maxSupplyTemp = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+        maxSupplyTemp -= preMintedCount;
+        maxSupplyTemp += count;
+        _setMaxSupply(maxSupplyTemp);
 
         // update the remaining token_id count
         remainingTokenIdCount = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
@@ -134,7 +134,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @notice Configure or update the maximum number of nfts that can be minted.
     /// @param newMaxSupply The new maximum number of nfts that can be minted.
     function setMaxSupply(uint256 newMaxSupply) external onlyRole(OWNER_ROLE) {
-        IOKXMultiMint(MULTIROUND_CONTRACT).setMaxSupply(newMaxSupply);
+        _setMaxSupply(newMaxSupply);
 
         // update the remaining token_id list
         delete remainingTokenIds; // Clear storage before re-allocating
@@ -152,15 +152,13 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         IOKXMultiMint(MULTIROUND_CONTRACT).setStageMintInfo(stageMintInfo);
 
         // update the max supply
-        uint256 maxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
-        maxSupply += stageMintInfo.maxSupplyForStage;
-        this.setMaxSupply(maxSupply);
+        uint256 maxSupplyTemp = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
 
         // update the remaining token_id list
         delete remainingTokenIds; // Clear storage before re-allocating
-        remainingTokenIds = new uint256[](maxSupply); // Allocate storage
+        remainingTokenIds = new uint256[](maxSupplyTemp); // Allocate storage
 
-        remainingTokenIdCount = maxSupply;
+        remainingTokenIdCount = maxSupplyTemp;
 
         // update the pre-minted count
         _processNewPreMinted(preMintedCount);
@@ -176,16 +174,16 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
 
     /// @notice According to the stage, set the maximum nft supply for a specific round.
     /// @param stage Round identification.
-    /// @param maxSupply nft maximum supply.
-    function setStageMaxSupply(string calldata stage, uint32 maxSupply) external onlyRole(OWNER_ROLE) {
+    /// @param maxSupply_ nft maximum supply.
+    function setStageMaxSupply(string calldata stage, uint32 maxSupply_) external onlyRole(OWNER_ROLE) {
         uint256 preMaxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
-        IOKXMultiMint(MULTIROUND_CONTRACT).setStageMaxSupply(stage, maxSupply);
+        IOKXMultiMint(MULTIROUND_CONTRACT).setStageMaxSupply(stage, maxSupply_);
 
         // update the max supply
         uint256 newMaxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
         newMaxSupply -= preMaxSupply;
-        newMaxSupply += maxSupply;
-        this.setMaxSupply(newMaxSupply);
+        newMaxSupply += maxSupply_;
+        _setMaxSupply(newMaxSupply);
 
         // update the remaining token_id list
         delete remainingTokenIds; // Clear storage before re-allocating
@@ -267,40 +265,60 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
 
         // get stage payment information
         IOKXMultiMint.StageMintInfo memory stageMintInfo = IOKXMultiMint(MULTIROUND_CONTRACT).stageToMint(stage);
-        address paymentToken = stageMintInfo.paymentToken;
-        address payeeAddress = stageMintInfo.payeeAddress;
-        uint256 nftPrice = stageMintInfo.price;
 
-        if (nftPrice != 0) {
-            if (paymentToken != address(0)) {
+        if (stageMintInfo.price != 0) {
+            if (stageMintInfo.paymentToken != address(0)) {
                 // ERC20 token transfer
                 require(
-                    IERC20(paymentToken).transferFrom(msg.sender, payeeAddress, nftPrice * amount),
+                    IERC20(stageMintInfo.paymentToken).transferFrom(
+                        msg.sender, stageMintInfo.payeeAddress, stageMintInfo.price * amount
+                    ),
                     "Transfer ERC20 failed"
                 );
             } else {
                 // native token transfer
-                require(msg.value >= nftPrice * amount, "Incorrect native payment amount");
-                payable(payeeAddress).transfer(msg.value);
+                require(msg.value >= stageMintInfo.price * amount, "Incorrect native payment amount");
+                payable(stageMintInfo.payeeAddress).transfer(msg.value);
             }
         }
 
         for (uint256 i = 0; i < amount; ++i) {
             // Mint NFt to the contract itself and register it as an IP
-            (tokenId, ipId) = _mintToSelf();
+            (tokenId, ipId) = _mintToSelf(0);
 
             // Transfer NFT to the recipient
             ISimpleERC721(NFT_CONTRACT).transferFrom(address(this), mintparams.to, tokenId);
+
+            lastMintedTokenId = tokenId;
         }
 
         emit NFTMinted(mintparams.to, tokenId, ipId);
     }
 
-    /// @notice Enable the test mode.
-    /// @param isTest_ Whether to enable the test mode.
-    function enableTestMode(bool isTest_) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        isTest = isTest_;
+    /// @notice Pre-Mints a NFT with specified tokenID for the given recipient, registers it as an IP,
+    ///         and makes it a derivative of the organization IP.
+    /// @param to The recipient of the minted NFT.
+    /// @param tokenId_ The token ID of the minted NFT.
+    function preMint(address to, uint256 tokenId_) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address ipId) {
+        require(tokenId_ != 0 && tokenId_ <= preMintedCount, "Invalid token ID");
+        // increase the total minted nft
+        IOKXMultiMint(MULTIROUND_CONTRACT).increaseTotalMintedAmount();
+
+        // Mint NFt to the contract itself and register it as an IP
+        uint256 tokenId = 0;
+        (tokenId, ipId) = _mintToSelf(tokenId_);
+
+        // Transfer NFT to the recipient
+        ISimpleERC721(NFT_CONTRACT).transferFrom(address(this), to, tokenId_);
+
+        emit NFTMinted(to, tokenId_, ipId);
     }
+
+    // /// @notice Enable the test mode.
+    // /// @param isTest_ Whether to enable the test mode.
+    // function enableTestMode(bool isTest_) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    //     isTest = isTest_;
+    // }
 
     //////////////////////////////////////////////////////////////////////////////////
     //                               READ FUNCTIONS                                 //
@@ -330,34 +348,39 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         return IOKXMultiMint(MULTIROUND_CONTRACT).stageToMint(stage);
     }
 
+    /// @notice Query the maximum number of nfts that can be minted
+    function maxSupply() external view returns (uint256) {
+        return IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+    }
+
     //////////////////////////////////////////////////////////////////////////////////
     //                             Internal functions                               //
     //////////////////////////////////////////////////////////////////////////////////
 
+    function _setMaxSupply(uint256 newMaxSupply) internal {
+        IOKXMultiMint(MULTIROUND_CONTRACT).setMaxSupply(newMaxSupply);
+    }
+
     /// @notice Mints an NFT to the contract itself.
     /// @return tokenId The token ID of the minted NFT.
     /// @return ipId The IP ID of the minted NFT.
-    function _mintToSelf() internal returns (uint256 tokenId, address ipId) {
-        tokenId = _getRandomId();
+    function _mintToSelf(uint256 expectedTokenId) internal returns (uint256 tokenId, address ipId) {
+        if (expectedTokenId != 0) {
+            tokenId = expectedTokenId;
+        } else {
+            tokenId = _getRandomId();
+        }
 
         ISimpleERC721(NFT_CONTRACT).safeMint(address(this), tokenId);
 
-        address[] memory parentIpIds = new address[](1);
-        uint256[] memory licenseTermsIds = new uint256[](1);
-        parentIpIds[0] = rootNFT.ipId;
-        licenseTermsIds[0] = DEFAULT_LICENSE_TERMS_ID;
+        address[] memory parentIpIds = rootNFT.ipIds;
+        uint256[] memory licenseTermsIds = rootNFT.licenseTermsIds;
 
-        if (!isTest) {
-            // register IP
-            // TODO: ip metadata hash following the tokenID?
-            ipId = _registerIp(tokenId, ipMetadataHash);
+        // register IP
+        ipId = _registerIp(tokenId, ipMetadataHash);
 
-            // make derivative
-            // TODO: add royalty context
-            _makeDerivative(ipId, parentIpIds, PIL_TEMPLATE, licenseTermsIds, "", 0, 0, 0);
-        } else {
-            return (tokenId, address(0));
-        }
+        // make derivative
+        _makeDerivative(ipId, parentIpIds, PIL_TEMPLATE, licenseTermsIds, "", 0, 0, 0);
     }
 
     /// @notice Get a random token ID from the remaining token IDs.
@@ -398,13 +421,14 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     function _registerIp(uint256 tokenId, bytes32 nftMetadataHash) internal returns (address ipId) {
         ipId = IIPAssetRegistry(IP_ASSET_REGISTRY).register(block.chainid, NFT_CONTRACT, tokenId);
 
-        // set the IP metadata if they are not empty
-        if (
-            keccak256(abi.encodePacked(ipMetadataURI)) != keccak256("") || ipMetadataHash != bytes32(0)
-                || nftMetadataHash != bytes32(0)
-        ) {
-            ICoreMetadataModule(CORE_METADATA_MODULE).setAll(ipId, ipMetadataURI, ipMetadataHash, nftMetadataHash);
-        }
+        // Commented out due to all parameters are empty
+        // // set the IP metadata if they are not empty
+        // if (
+        //     keccak256(abi.encodePacked(ipMetadataURI)) != keccak256("") || ipMetadataHash != bytes32(0)
+        //         || nftMetadataHash != bytes32(0)
+        // ) {
+        //     ICoreMetadataModule(CORE_METADATA_MODULE).setAll(ipId, ipMetadataURI, ipMetadataHash, nftMetadataHash);
+        // }
     }
 
     /// @notice Register `ipId` as a derivative of `parentIpIds` under `licenseTemplate` with `licenseTermsIds`.

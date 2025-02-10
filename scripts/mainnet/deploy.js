@@ -11,18 +11,18 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   // deploy MimBokuMultiRound
   const iPMetadata = {
     rootNFT: {
-      contractAddress: "0x58f70546aB8315010cd659AD2E5d06BeDd37C5A3",
-      tokenId: [1, 2],
-      ipId: [
-        "0xb7ca5DB08Be6A03cF2A416807Abac4c1385f3C7C",
-        "0xb7ca5DB08Be6A03cF2A416807Abac4c1385f3C7C",
+      contractAddress: "0xfbC38Bd2F4328364dE86695e724F80F2B78CB869",
+      tokenIds: [1, 2],
+      ipIds: [
+        "0x15E84a494C1a57b8681edf39A8755359c67f43FF",
+        "0xDB291421D5354A3A6F94046a64B710bB43523019",
       ],
-      licenseTermsIds: [1, 1],
+      licenseTermsIds: [20, 20], // Commercial Remix license with 5% royalty
     },
-    pilTemplate: "0x58E2c909D557Cd23EF90D14f8fd21667A5Ae7a93",
-    ipAssetRegistry: "0x28E59E91C0467e89fd0f0438D47Ca839cDfEc095",
-    coreMetadataModule: "0x89630Ccf23277417FBdfd3076C702F5248267e78",
-    licenseModule: "0x5a7D9Fa17DE09350F481A53B470D798c1c1aabae",
+    pilTemplate: "0x2E896b0b2Fdb7457499B56AAaA4AE55BCB4Cd316",
+    ipAssetRegistry: "0x77319B4031e6eF1250907aa00018B8B1c67a244b",
+    coreMetadataModule: "0x6E81a25C99C6e8430aeC7353325EB138aFE5DC16",
+    licenseModule: "0x04fbd8a2e56dd85CFD5500A4A4DfA955B9f1dE6f",
     ipMetadataURI: "",
     ipMetadataHash: ethers.ZeroHash,
   };
@@ -104,7 +104,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   // set stage mint info
   const stageMintInfo = {
-    enableSig: 1,
+    enableSig: 0,
     limitationForAddress: 50,
     maxSupplyForStage: 100,
     startTime: Math.floor((Date.now() + 60 * 1000) / 1000), // 1 mins later
@@ -127,7 +127,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   // set stage mint info
   const stageMintInfo2 = {
-    enableSig: 1,
+    enableSig: 0,
     limitationForAddress: 1,
     maxSupplyForStage: 100,
     startTime: Math.floor(

@@ -3,6 +3,7 @@ const privateKey = fs.readFileSync(".secret").toString().trim();
 
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomicfoundation/hardhat-foundry");
+require("@openzeppelin/hardhat-upgrades");
 require("hardhat-gas-reporter");
 require("hardhat-deploy");
 
@@ -12,7 +13,7 @@ module.exports = {
   settings: {
     optimizer: {
       enabled: true,
-      runs: 200,
+      runs: 50,
     },
   },
   defaultNetwork: "hardhat",
@@ -44,10 +45,10 @@ module.exports = {
       allowUnlimitedContractSize: true,
     },
     mainnet: {
-      url: "http://homer.storyrpc.io",
+      url: "https://rpc-evm.story.rawaki.xyz/",
       chainId: 1514,
       throwOnTransactionFailures: true,
-      gasPrice: 100000000,
+      gasPrice: 200000000,
       accounts: [privateKey],
       gas: 4000000,
       timeout: 120000,
@@ -60,7 +61,7 @@ module.exports = {
     },
   },
   paths: {
-    deploy: "scripts/testnet",
+    deploy: "scripts/mainnet",
     deployments: "deployments",
   },
 };

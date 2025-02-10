@@ -23,6 +23,7 @@ contract OKXMultiMint is IOKXMultiMint, EIP712Upgradeable, AccessControlUpgradea
     uint256 private totalMaxSupply; // Maximum supply of the NFTs of all stages.
     uint256 public totalMintedAmount;
 
+    /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
@@ -324,6 +325,11 @@ contract OKXMultiMint is IOKXMultiMint, EIP712Upgradeable, AccessControlUpgradea
         if (totalMintedAmount + amount > totalMaxSupply) {
             revert ExceedMaxSupply();
         }
+    }
+
+    /// @notice Function for pre-minted NFTs.
+    function increaseTotalMintedAmount() external onlyRole(OWNER_CONTRACT) {
+        ++totalMintedAmount;
     }
 
     function _cast(bool b) internal pure returns (uint256 u) {

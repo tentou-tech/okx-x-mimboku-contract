@@ -1,15 +1,15 @@
 # okx-story-nft
 
 This is the repository for NFT multiMint of the OKX x Mimboku on Story protocol network.
-_Note_: This version is suitable for [@story-protocol/story-core v1.2.3](https://github.com/storyprotocol/protocol-core-v1/commit/58f023cb4a5ee81617bc8a02a3d2087e125e5a36) and works on the [Story Odyssey Testnet](https://chainlist.org/chain/1516).
+_Note_: This version is suitable for [@story-protocol/story-core v1.3.1](https://github.com/storyprotocol/protocol-core-v1/commit/a0cddb1d712566a550fcaca2f8df1f4f67f095ad) and works on the [Story Mainnet](https://chainlist.org/chain/1514).
 
 ## Deployed contracts
 
-To be easy to use, we have deployed the contract on the Story Odyssey Testnet. You can check the contract at the following address:
+To be easy to use, we have deployed the contract on the Story mainnet for testing. You can check the contract at the following address:
 | Contract | Address |
 |-------------------|--------------------------------------------|
-| MimBokuNFT | [0x5f96E6840f8E263d5eB08dDE2Dbd230BDc586F66](https://odyssey.storyscan.xyz/token/0x5f96E6840f8E263d5eB08dDE2Dbd230BDc586F66) |
-| MimbokuMultiround | [0xb9F3321EDc4Ec9A447f3F219c78B13F440C7655d](https://odyssey.storyscan.xyz/address/0xb9F3321EDc4Ec9A447f3F219c78B13F440C7655d) |
+| MimBokuNFT | [0xeCa078CbD29D0CD125a7b410952177692c9D9A0a](https://kmnzxolweu42.blockscout.com/token/0xeCa078CbD29D0CD125a7b410952177692c9D9A0a) |
+| MimbokuMultiround | [0x8345448b890985baa74b86c167352ee0e31a8327](https://kmnzxolweu42.blockscout.com/address/0x8345448b890985baa74b86c167352ee0e31a8327) |
 
 ## Installation requirements
 

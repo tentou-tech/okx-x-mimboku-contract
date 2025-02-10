@@ -55,10 +55,10 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @notice Last minted token ID
     uint256 public lastMintedTokenId;
 
-    /// @notice This flag is used for testing purposes due to the IP workflows contracts deployment.
-    /// @dev This flag is false by default. It should be set to true only when testing.
-    /// @dev This flag will disable the IP registration and derivative creation.
-    bool public isTest;
+    // /// @notice This flag is used for testing purposes due to the IP workflows contracts deployment.
+    // /// @dev This flag is false by default. It should be set to true only when testing.
+    // /// @dev This flag will disable the IP registration and derivative creation.
+    // bool public isTest;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -265,21 +265,20 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
 
         // get stage payment information
         IOKXMultiMint.StageMintInfo memory stageMintInfo = IOKXMultiMint(MULTIROUND_CONTRACT).stageToMint(stage);
-        address paymentToken = stageMintInfo.paymentToken;
-        address payeeAddress = stageMintInfo.payeeAddress;
-        uint256 nftPrice = stageMintInfo.price;
 
-        if (nftPrice != 0) {
-            if (paymentToken != address(0)) {
+        if (stageMintInfo.price != 0) {
+            if (stageMintInfo.paymentToken != address(0)) {
                 // ERC20 token transfer
                 require(
-                    IERC20(paymentToken).transferFrom(msg.sender, payeeAddress, nftPrice * amount),
+                    IERC20(stageMintInfo.paymentToken).transferFrom(
+                        msg.sender, stageMintInfo.payeeAddress, stageMintInfo.price * amount
+                    ),
                     "Transfer ERC20 failed"
                 );
             } else {
                 // native token transfer
-                require(msg.value >= nftPrice * amount, "Incorrect native payment amount");
-                payable(payeeAddress).transfer(msg.value);
+                require(msg.value >= stageMintInfo.price * amount, "Incorrect native payment amount");
+                payable(stageMintInfo.payeeAddress).transfer(msg.value);
             }
         }
 
@@ -315,11 +314,11 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         emit NFTMinted(to, tokenId_, ipId);
     }
 
-    /// @notice Enable the test mode.
-    /// @param isTest_ Whether to enable the test mode.
-    function enableTestMode(bool isTest_) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        isTest = isTest_;
-    }
+    // /// @notice Enable the test mode.
+    // /// @param isTest_ Whether to enable the test mode.
+    // function enableTestMode(bool isTest_) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    //     isTest = isTest_;
+    // }
 
     //////////////////////////////////////////////////////////////////////////////////
     //                               READ FUNCTIONS                                 //
@@ -377,15 +376,11 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         address[] memory parentIpIds = rootNFT.ipIds;
         uint256[] memory licenseTermsIds = rootNFT.licenseTermsIds;
 
-        if (!isTest) {
-            // register IP
-            ipId = _registerIp(tokenId, ipMetadataHash);
+        // register IP
+        ipId = _registerIp(tokenId, ipMetadataHash);
 
-            // make derivative
-            _makeDerivative(ipId, parentIpIds, PIL_TEMPLATE, licenseTermsIds, "", 0, 0, 0);
-        } else {
-            return (tokenId, address(0));
-        }
+        // make derivative
+        _makeDerivative(ipId, parentIpIds, PIL_TEMPLATE, licenseTermsIds, "", 0, 0, 0);
     }
 
     /// @notice Get a random token ID from the remaining token IDs.
@@ -426,13 +421,14 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     function _registerIp(uint256 tokenId, bytes32 nftMetadataHash) internal returns (address ipId) {
         ipId = IIPAssetRegistry(IP_ASSET_REGISTRY).register(block.chainid, NFT_CONTRACT, tokenId);
 
-        // set the IP metadata if they are not empty
-        if (
-            keccak256(abi.encodePacked(ipMetadataURI)) != keccak256("") || ipMetadataHash != bytes32(0)
-                || nftMetadataHash != bytes32(0)
-        ) {
-            ICoreMetadataModule(CORE_METADATA_MODULE).setAll(ipId, ipMetadataURI, ipMetadataHash, nftMetadataHash);
-        }
+        // Commented out due to all parameters are empty
+        // // set the IP metadata if they are not empty
+        // if (
+        //     keccak256(abi.encodePacked(ipMetadataURI)) != keccak256("") || ipMetadataHash != bytes32(0)
+        //         || nftMetadataHash != bytes32(0)
+        // ) {
+        //     ICoreMetadataModule(CORE_METADATA_MODULE).setAll(ipId, ipMetadataURI, ipMetadataHash, nftMetadataHash);
+        // }
     }
 
     /// @notice Register `ipId` as a derivative of `parentIpIds` under `licenseTemplate` with `licenseTermsIds`.

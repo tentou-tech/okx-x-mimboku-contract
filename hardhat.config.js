@@ -13,7 +13,7 @@ module.exports = {
   settings: {
     optimizer: {
       enabled: true,
-      runs: 100,
+      runs: 50,
     },
   },
   defaultNetwork: "hardhat",
@@ -45,10 +45,10 @@ module.exports = {
       allowUnlimitedContractSize: true,
     },
     mainnet: {
-      url: "http://homer.storyrpc.io",
+      url: "https://rpc-evm.story.rawaki.xyz/",
       chainId: 1514,
       throwOnTransactionFailures: true,
-      gasPrice: 100000000,
+      gasPrice: 200000000,
       accounts: [privateKey],
       gas: 4000000,
       timeout: 120000,

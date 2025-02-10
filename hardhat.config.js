@@ -13,7 +13,7 @@ module.exports = {
   settings: {
     optimizer: {
       enabled: true,
-      runs: 200,
+      runs: 100,
     },
   },
   defaultNetwork: "hardhat",
@@ -61,7 +61,7 @@ module.exports = {
     },
   },
   paths: {
-    deploy: "scripts/testnet",
+    deploy: "scripts/mainnet",
     deployments: "deployments",
   },
 };

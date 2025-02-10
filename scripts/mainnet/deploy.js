@@ -12,13 +12,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const iPMetadata = {
     rootNFT: {
       contractAddress: "0x58f70546aB8315010cd659AD2E5d06BeDd37C5A3",
-      tokenId: [1, 2],
-      ipId: [
-        "0xb7ca5DB08Be6A03cF2A416807Abac4c1385f3C7C",
-        "0xb7ca5DB08Be6A03cF2A416807Abac4c1385f3C7C",
-      ],
-      licenseTermsIds: [1, 1],
+      tokenId: 1,
+      ipId: "0xb7ca5DB08Be6A03cF2A416807Abac4c1385f3C7C",
     },
+    defaultLicenseTermsId: 1,
     pilTemplate: "0x58E2c909D557Cd23EF90D14f8fd21667A5Ae7a93",
     ipAssetRegistry: "0x28E59E91C0467e89fd0f0438D47Ca839cDfEc095",
     coreMetadataModule: "0x89630Ccf23277417FBdfd3076C702F5248267e78",
@@ -104,7 +101,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   // set stage mint info
   const stageMintInfo = {
-    enableSig: 1,
+    enableSig: 0,
     limitationForAddress: 50,
     maxSupplyForStage: 100,
     startTime: Math.floor((Date.now() + 60 * 1000) / 1000), // 1 mins later
@@ -127,7 +124,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   // set stage mint info
   const stageMintInfo2 = {
-    enableSig: 1,
+    enableSig: 0,
     limitationForAddress: 1,
     maxSupplyForStage: 100,
     startTime: Math.floor(

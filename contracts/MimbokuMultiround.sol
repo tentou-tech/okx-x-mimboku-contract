@@ -24,9 +24,6 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// We need a MultiRound contract to manage rounds
     address public MULTIROUND_CONTRACT;
 
-    /// @notice The default license terms ID.
-    uint256 public DEFAULT_LICENSE_TERMS_ID;
-
     /// @notice Story Proof-of-Creativity PILicense Template address.
     address public PIL_TEMPLATE;
 
@@ -91,7 +88,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         // The ip metadata
         rootNFT = ipMetadata.rootNFT;
 
-        DEFAULT_LICENSE_TERMS_ID = ipMetadata.defaultLicenseTermsId;
+        // DEFAULT_LICENSE_TERMS_ID = ipMetadata.defaultLicenseTermsId;
         PIL_TEMPLATE = ipMetadata.pilTemplate;
         IP_ASSET_REGISTRY = ipMetadata.ipAssetRegistry;
         CORE_METADATA_MODULE = ipMetadata.coreMetadataModule;
@@ -108,10 +105,10 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @param count The number of pre-minted NFTs
     function setPreMintedCount(uint256 count) external onlyRole(OWNER_ROLE) {
         // update new max supply
-        uint256 maxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
-        maxSupply -= preMintedCount;
-        maxSupply += count;
-        _setMaxSupply(maxSupply);
+        uint256 maxSupplyTemp = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+        maxSupplyTemp -= preMintedCount;
+        maxSupplyTemp += count;
+        _setMaxSupply(maxSupplyTemp);
 
         // update the remaining token_id count
         remainingTokenIdCount = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
@@ -155,13 +152,13 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         IOKXMultiMint(MULTIROUND_CONTRACT).setStageMintInfo(stageMintInfo);
 
         // update the max supply
-        uint256 maxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+        uint256 maxSupplyTemp = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
 
         // update the remaining token_id list
         delete remainingTokenIds; // Clear storage before re-allocating
-        remainingTokenIds = new uint256[](maxSupply); // Allocate storage
+        remainingTokenIds = new uint256[](maxSupplyTemp); // Allocate storage
 
-        remainingTokenIdCount = maxSupply;
+        remainingTokenIdCount = maxSupplyTemp;
 
         // update the pre-minted count
         _processNewPreMinted(preMintedCount);
@@ -177,15 +174,15 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
 
     /// @notice According to the stage, set the maximum nft supply for a specific round.
     /// @param stage Round identification.
-    /// @param maxSupply nft maximum supply.
-    function setStageMaxSupply(string calldata stage, uint32 maxSupply) external onlyRole(OWNER_ROLE) {
+    /// @param maxSupply_ nft maximum supply.
+    function setStageMaxSupply(string calldata stage, uint32 maxSupply_) external onlyRole(OWNER_ROLE) {
         uint256 preMaxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
-        IOKXMultiMint(MULTIROUND_CONTRACT).setStageMaxSupply(stage, maxSupply);
+        IOKXMultiMint(MULTIROUND_CONTRACT).setStageMaxSupply(stage, maxSupply_);
 
         // update the max supply
         uint256 newMaxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
         newMaxSupply -= preMaxSupply;
-        newMaxSupply += maxSupply;
+        newMaxSupply += maxSupply_;
         _setMaxSupply(newMaxSupply);
 
         // update the remaining token_id list
@@ -377,18 +374,14 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
 
         ISimpleERC721(NFT_CONTRACT).safeMint(address(this), tokenId);
 
-        address[] memory parentIpIds = new address[](1);
-        uint256[] memory licenseTermsIds = new uint256[](1);
-        parentIpIds[0] = rootNFT.ipId;
-        licenseTermsIds[0] = DEFAULT_LICENSE_TERMS_ID;
+        address[] memory parentIpIds = rootNFT.ipIds;
+        uint256[] memory licenseTermsIds = rootNFT.licenseTermsIds;
 
         if (!isTest) {
             // register IP
-            // TODO: ip metadata hash following the tokenID?
             ipId = _registerIp(tokenId, ipMetadataHash);
 
             // make derivative
-            // TODO: add royalty context
             _makeDerivative(ipId, parentIpIds, PIL_TEMPLATE, licenseTermsIds, "", 0, 0, 0);
         } else {
             return (tokenId, address(0));
@@ -466,10 +459,10 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
             parentIpIds: parentIpIds,
             licenseTermsIds: licenseTermsIds,
             licenseTemplate: licenseTemplate,
-            royaltyContext: royaltyContext
+            royaltyContext: royaltyContext,
+            maxMintingFee: maxMintingFee,
+            maxRts: maxRts,
+            maxRevenueShare: maxRevenueShare
         });
-        // maxMintingFee: maxMintingFee
-        // maxRts: maxRts,
-        // maxRevenueShare: maxRevenueShare
     }
 }

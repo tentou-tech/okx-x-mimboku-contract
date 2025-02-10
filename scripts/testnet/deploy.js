@@ -62,6 +62,15 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log: true,
   });
 
+  // set default royalty for MimBokuNFT
+  await execute(
+    "MimBokuNFT",
+    { from: deployer, log: true, gasLimit: 200000 },
+    "setDefaultRoyalty",
+    defaultAdmin,
+    500
+  );
+
   const owner = mimBokuMultiRoundContract.address;
   // deploy OKXMultiMint
   const okxMultiMintContract = await deploy("OKXMultiMint", {

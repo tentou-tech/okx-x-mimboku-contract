@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/contracts/MimBokuNFT.sol": {
-      "lastModificationDate": 1739096454567,
-      "contentHash": "71085224ba53369f9fe26852789f536d",
+      "lastModificationDate": 1739107293803,
+      "contentHash": "cebd47d37a0375ea4b5603fcbf5ef10f",
       "sourceName": "contracts/MimBokuNFT.sol",
       "solcConfig": {
         "version": "0.8.26",
@@ -40,6 +40,7 @@
         "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol",
         "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol",
         "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/token/common/ERC2981Upgradeable.sol",
         "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol"
       ],
       "versionPragmas": [
@@ -1719,6 +1720,99 @@
       ],
       "artifacts": [
         "Hashes"
+      ]
+    },
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts-upgradeable/token/common/ERC2981Upgradeable.sol": {
+      "lastModificationDate": 1738901010291,
+      "contentHash": "2e0301d4a2aa62c02bf799d08eaa3013",
+      "sourceName": "@openzeppelin/contracts-upgradeable/token/common/ERC2981Upgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.26",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout",
+                "devdoc",
+                "userdoc",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/interfaces/IERC2981.sol",
+        "@openzeppelin/contracts/utils/introspection/IERC165.sol",
+        "../../utils/introspection/ERC165Upgradeable.sol",
+        "../../proxy/utils/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "ERC2981Upgradeable"
+      ]
+    },
+    "/home/hoanm/prjs/punkga/okx-x-mimboku-contract/node_modules/@openzeppelin/contracts/interfaces/IERC2981.sol": {
+      "lastModificationDate": 1738901009491,
+      "contentHash": "1f306be7759a59a417eae412865daa78",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC2981.sol",
+      "solcConfig": {
+        "version": "0.8.26",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout",
+                "devdoc",
+                "userdoc",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "../utils/introspection/IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "IERC2981"
       ]
     }
   }

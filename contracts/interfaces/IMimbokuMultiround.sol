@@ -50,7 +50,7 @@ interface IMimbokuMultiround {
 
     /// @notice Configure or update the maximum number of nfts that can be minted.
     /// @param newMaxSupply The new maximum number of nfts that can be minted.
-    function setMaxSupply(uint256 newMaxSupply) external;
+    function setMaxsupply(uint256 newMaxSupply) external;
 
     /// @notice Configure or update the information of a certain round according to the stage
     /// @param stageMintInfo The mint information for the stage.
@@ -72,7 +72,7 @@ interface IMimbokuMultiround {
     /// @param payeeAddress Payment address.
     /// @param paymentToken Token contract address for payment (if 0, it is a native token).
     /// @param price Single nft price.
-    function setStagePayment(string calldata stage, address payeeAddress, address paymentToken, uint64 price)
+    function setStagePayment(string calldata stage, address payeeAddress, address paymentToken, uint256 price)
         external;
 
     /// @notice Set the upper limit of the number of mints per address for a specific round according to the stage
@@ -97,7 +97,7 @@ interface IMimbokuMultiround {
     /// @param isTransferRestricted_ Whether to restrict transfer.
     /// @param startTime Start time.
     /// @param endTime End time.
-    function setTransferRestricted(bool isTransferRestricted_, uint64 startTime, uint64 endTime) external;
+    function setTransferRestrict(bool isTransferRestricted_, uint64 startTime, uint64 endTime) external;
 
     /// @notice Mints a NFT for the given recipient, registers it as an IP,
     ///         and makes it a derivative of the organization IP.
@@ -113,7 +113,7 @@ interface IMimbokuMultiround {
         bytes calldata signature,
         bytes32[] calldata proof,
         IOKXMultiMint.MintParams calldata mintparams
-    ) external payable returns (uint256 tokenId, address ipId);
+    ) external payable;
 
     //////////////////////////////////////////////////////////////////////////////////
     //                               READ FUNCTIONS                                 //
@@ -133,5 +133,20 @@ interface IMimbokuMultiround {
 
     /// @notice Query configuration information for a specific stage
     /// @param stage The stage name
-    function stageToMint(string memory stage) external view returns (IOKXMultiMint.StageMintInfo memory);
+    function stageToMint(string memory stage)
+        external
+        view
+        returns (
+            bool enableSig,
+            uint8 limitationForAddress,
+            uint32 maxSupplyForStage,
+            uint64 startTime,
+            uint64 endTime,
+            uint256 price,
+            address paymentToken,
+            address payeeAddress,
+            bytes32 allowListMerkleRoot,
+            string memory stage,
+            IOKXMultiMint.MintType mintType
+        );
 }

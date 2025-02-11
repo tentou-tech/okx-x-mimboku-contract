@@ -101,12 +101,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   // set stage mint info
   const stageMintInfo = {
-    enableSig: 0,
+    enableSig: 1,
     limitationForAddress: 50,
     maxSupplyForStage: 100,
     startTime: Math.floor((Date.now() + 60 * 1000) / 1000), // 1 mins later
-    endTime: Math.floor((Date.now() + 24 * 60 * 60 * 1000) / 1000), // 24 hour later
-    price: 1,
+    endTime: Math.floor((Date.now() + 5 * 24 * 60 * 60 * 1000) / 1000), // 5 days later
+    price: 100000000000000000n,
     paymentToken: ethers.ZeroAddress,
     payeeAddress: deployer,
     allowListMerkleRoot:
@@ -124,14 +124,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   // set stage mint info
   const stageMintInfo2 = {
-    enableSig: 0,
-    limitationForAddress: 1,
+    enableSig: 1,
+    limitationForAddress: 5,
     maxSupplyForStage: 100,
-    startTime: Math.floor(
-      (Date.now() + 24 * 60 * 60 * 1000 + 30 * 60 * 1000) / 1000
-    ), // 24 hour and 30 minutes later
-    endTime: Math.floor((Date.now() + 48 * 60 * 60 * 1000) / 1000), // 48 hour later
-    price: 2,
+    startTime: Math.floor((Date.now() + 60 * 1000) / 1000), // 1 mins later
+    endTime: Math.floor((Date.now() + 5 * 24 * 60 * 60 * 1000) / 1000), // 5 days later
+    price: 200000000000000000n,
     paymentToken: ethers.ZeroAddress,
     payeeAddress: deployer,
     allowListMerkleRoot: ethers.ZeroHash,
@@ -152,6 +150,14 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     { from: deployer, log: true, gasLimit: 600000 },
     "setPreMintedCount",
     20
+  );
+
+  // Set Signer
+  await execute(
+    "MimbokuMultiround",
+    { from: deployer, log: true, gasLimit: 600000 },
+    "setSigner",
+    "0x7956853188c5fdaa5853ed12346f78991d3807d9"
   );
 };
 

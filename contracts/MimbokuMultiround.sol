@@ -108,10 +108,10 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @param count The number of pre-minted NFTs
     function setPreMintedCount(uint256 count) external onlyRole(OWNER_ROLE) {
         // update new max supply
-        uint256 maxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
-        maxSupply -= preMintedCount;
-        maxSupply += count;
-        _setMaxSupply(maxSupply);
+        uint256 maxSupply_ = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+        maxSupply_ -= preMintedCount;
+        maxSupply_ += count;
+        _setMaxSupply(maxSupply_);
 
         // update the remaining token_id count
         remainingTokenIdCount = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
@@ -136,7 +136,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
 
     /// @notice Configure or update the maximum number of nfts that can be minted.
     /// @param newMaxSupply The new maximum number of nfts that can be minted.
-    function setMaxSupply(uint256 newMaxSupply) external onlyRole(OWNER_ROLE) {
+    function setMaxsupply(uint256 newMaxSupply) external onlyRole(OWNER_ROLE) {
         _setMaxSupply(newMaxSupply);
 
         // update the remaining token_id list
@@ -155,13 +155,13 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         IOKXMultiMint(MULTIROUND_CONTRACT).setStageMintInfo(stageMintInfo);
 
         // update the max supply
-        uint256 maxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+        uint256 maxSupply_ = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
 
         // update the remaining token_id list
         delete remainingTokenIds; // Clear storage before re-allocating
-        remainingTokenIds = new uint256[](maxSupply); // Allocate storage
+        remainingTokenIds = new uint256[](maxSupply_); // Allocate storage
 
-        remainingTokenIdCount = maxSupply;
+        remainingTokenIdCount = maxSupply_;
 
         // update the pre-minted count
         _processNewPreMinted(preMintedCount);
@@ -177,15 +177,15 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
 
     /// @notice According to the stage, set the maximum nft supply for a specific round.
     /// @param stage Round identification.
-    /// @param maxSupply nft maximum supply.
-    function setStageMaxSupply(string calldata stage, uint32 maxSupply) external onlyRole(OWNER_ROLE) {
+    /// @param maxSupply_ nft maximum supply.
+    function setStageMaxSupply(string calldata stage, uint32 maxSupply_) external onlyRole(OWNER_ROLE) {
         uint256 preMaxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
-        IOKXMultiMint(MULTIROUND_CONTRACT).setStageMaxSupply(stage, maxSupply);
+        IOKXMultiMint(MULTIROUND_CONTRACT).setStageMaxSupply(stage, maxSupply_);
 
         // update the max supply
         uint256 newMaxSupply = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
         newMaxSupply -= preMaxSupply;
-        newMaxSupply += maxSupply;
+        newMaxSupply += maxSupply_;
         _setMaxSupply(newMaxSupply);
 
         // update the remaining token_id list
@@ -202,7 +202,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @param payeeAddress Payment address.
     /// @param paymentToken Token contract address for payment (if 0, it is a native token).
     /// @param price Single nft price.
-    function setStagePayment(string calldata stage, address payeeAddress, address paymentToken, uint64 price)
+    function setStagePayment(string calldata stage, address payeeAddress, address paymentToken, uint256 price)
         external
         onlyRole(OWNER_ROLE)
     {
@@ -240,7 +240,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @param isTransferRestricted_ Whether to restrict transfer.
     /// @param startTime Start time.
     /// @param endTime End time.
-    function setTransferRestricted(bool isTransferRestricted_, uint64 startTime, uint64 endTime)
+    function setTransferRestrict(bool isTransferRestricted_, uint64 startTime, uint64 endTime)
         external
         onlyRole(OWNER_ROLE)
     {
@@ -254,14 +254,12 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @param proof         The proof for the leaf of the allowlist in a stage if mint type is Allowlist.
     /// @param mintparams    The mint parameter
     /// signer sign the caller's address (msg.sender) for this `mint` function.
-    /// @return tokenId The token ID of the minted NFT.
-    /// @return ipId The ID of the NFT IP.
     function mint(
         string calldata stage,
         bytes calldata signature,
         bytes32[] calldata proof,
         IOKXMultiMint.MintParams calldata mintparams
-    ) external payable returns (uint256 tokenId, address ipId) {
+    ) external payable {
         // register minting with OKX MultiRound, and get the remaining amount to mint
         uint256 amount =
             IOKXMultiMint(MULTIROUND_CONTRACT).eligibleCheckingAndRegister(stage, proof, signature, mintparams);
@@ -287,6 +285,8 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         }
 
         for (uint256 i = 0; i < amount; ++i) {
+            uint256 tokenId;
+            address ipId;
             // Mint NFt to the contract itself and register it as an IP
             (tokenId, ipId) = _mintToSelf(0);
 
@@ -294,9 +294,9 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
             ISimpleERC721(NFT_CONTRACT).transferFrom(address(this), mintparams.to, tokenId);
 
             lastMintedTokenId = tokenId;
-        }
 
-        emit NFTMinted(mintparams.to, tokenId, ipId);
+            emit NFTMinted(mintparams.to, tokenId, ipId);
+        }
     }
 
     /// @notice Pre-Mints a NFT with specified tokenID for the given recipient, registers it as an IP,
@@ -347,9 +347,39 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     }
 
     /// @notice Query configuration information for a specific stage
-    /// @param stage The stage name
-    function stageToMint(string memory stage) external view returns (IOKXMultiMint.StageMintInfo memory) {
-        return IOKXMultiMint(MULTIROUND_CONTRACT).stageToMint(stage);
+    /// @param stage_ The stage name
+    function stageToMint(string memory stage_)
+        external
+        view
+        returns (
+            bool enableSig,
+            uint8 limitationForAddress,
+            uint32 maxSupplyForStage,
+            uint64 startTime,
+            uint64 endTime,
+            uint256 price,
+            address paymentToken,
+            address payeeAddress,
+            bytes32 allowListMerkleRoot,
+            string memory stage,
+            IOKXMultiMint.MintType mintType
+        )
+    {
+        IOKXMultiMint.StageMintInfo memory rs = IOKXMultiMint(MULTIROUND_CONTRACT).stageToMint(stage_);
+
+        return (
+            rs.enableSig,
+            rs.limitationForAddress,
+            rs.maxSupplyForStage,
+            rs.startTime,
+            rs.endTime,
+            rs.price,
+            rs.paymentToken,
+            rs.payeeAddress,
+            rs.allowListMerkleRoot,
+            rs.stage,
+            rs.mintType
+        );
     }
 
     /// @notice Query the maximum number of nfts that can be minted

@@ -47,7 +47,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     uint256[] private remainingTokenIds;
 
     /// @notice Number of remaining token_id
-    uint256 private remainingTokenIdCount;
+    uint256 public remainingTokenIdCount;
 
     /// @notice Number of pre-minted NFTs
     uint256 public preMintedCount;
@@ -113,8 +113,9 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         // update the remaining token_id count
         remainingTokenIdCount = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
 
+        preMintedCount = count;
         // process the new pre-minted NFTs
-        _processNewPreMinted(count);
+        // _processNewPreMinted(count);
     }
 
     /// @notice Updates the MULTIROUND_CONTRACT and the NFT_CONTRACT addresses.
@@ -151,17 +152,17 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     function setStageMintInfo(IOKXMultiMint.StageMintInfo calldata stageMintInfo) external onlyRole(OWNER_ROLE) {
         IOKXMultiMint(MULTIROUND_CONTRACT).setStageMintInfo(stageMintInfo);
 
-        // update the max supply
-        uint256 maxSupplyTemp = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
+        // // update the max supply
+        // uint256 maxSupplyTemp = IOKXMultiMint(MULTIROUND_CONTRACT).maxSupply();
 
-        // update the remaining token_id list
-        delete remainingTokenIds; // Clear storage before re-allocating
-        remainingTokenIds = new uint256[](maxSupplyTemp); // Allocate storage
+        // // update the remaining token_id list
+        // delete remainingTokenIds; // Clear storage before re-allocating
+        // remainingTokenIds = new uint256[](maxSupplyTemp); // Allocate storage
 
-        remainingTokenIdCount = maxSupplyTemp;
+        // remainingTokenIdCount = maxSupplyTemp;
 
-        // update the pre-minted count
-        _processNewPreMinted(preMintedCount);
+        // // update the pre-minted count
+        // _processNewPreMinted(preMintedCount);
     }
 
     /// @notice Configure or update the mint time for a specific stage.
@@ -185,10 +186,10 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         newMaxSupply += maxSupply_;
         _setMaxSupply(newMaxSupply);
 
-        // update the remaining token_id list
-        delete remainingTokenIds; // Clear storage before re-allocating
-        remainingTokenIds = new uint256[](newMaxSupply); // Allocate storage
-        remainingTokenIdCount = newMaxSupply;
+        // // update the remaining token_id list
+        // delete remainingTokenIds; // Clear storage before re-allocating
+        // remainingTokenIds = new uint256[](newMaxSupply); // Allocate storage
+        // remainingTokenIdCount = newMaxSupply;
 
         // update the pre-minted count
         _processNewPreMinted(preMintedCount);
@@ -251,8 +252,6 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
     /// @param proof         The proof for the leaf of the allowlist in a stage if mint type is Allowlist.
     /// @param mintparams    The mint parameter
     /// signer sign the caller's address (msg.sender) for this `mint` function.
-    /// @return tokenId The token ID of the minted NFT.
-    /// @return ipId The ID of the NFT IP.
     function mint(
         string calldata stage,
         bytes calldata signature,
@@ -453,13 +452,13 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, EIP712Upgradeab
         ipId = IIPAssetRegistry(IP_ASSET_REGISTRY).register(block.chainid, NFT_CONTRACT, tokenId);
 
         // Commented out due to all parameters are empty
-        // // set the IP metadata if they are not empty
-        // if (
-        //     keccak256(abi.encodePacked(ipMetadataURI)) != keccak256("") || ipMetadataHash != bytes32(0)
-        //         || nftMetadataHash != bytes32(0)
-        // ) {
-        //     ICoreMetadataModule(CORE_METADATA_MODULE).setAll(ipId, ipMetadataURI, ipMetadataHash, nftMetadataHash);
-        // }
+        // set the IP metadata if they are not empty
+        if (
+            keccak256(abi.encodePacked(ipMetadataURI)) != keccak256("") || ipMetadataHash != bytes32(0)
+                || nftMetadataHash != bytes32(0)
+        ) {
+            ICoreMetadataModule(CORE_METADATA_MODULE).setAll(ipId, ipMetadataURI, ipMetadataHash, nftMetadataHash);
+        }
     }
 
     /// @notice Register `ipId` as a derivative of `parentIpIds` under `licenseTemplate` with `licenseTermsIds`.

@@ -29,7 +29,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const mimBokuMultiRoundContract = await deploy("MimbokuMultiround", {
     admin: defaultAdmin,
     from: deployer,
-    gasLimit: 4000000,
+    gasLimit: 6000000,
     proxy: {
       execute: {
         init: {
@@ -68,7 +68,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   // set default royalty for MimBokuNFT
   await execute(
     "MimBokuNFT",
-    { from: deployer, log: true, gasLimit: 200000 },
+    { from: deployer, log: true, gasLimit: 100000 },
     "setDefaultRoyalty",
     defaultAdmin,
     500
@@ -102,14 +102,37 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     okxMultiMintContract.address
   );
 
-  // set stage mint info
-  const stageMintInfo = {
+  // set stage mint info for OG
+  const stageMintInfoOG = {
     enableSig: 0,
-    limitationForAddress: 50,
-    maxSupplyForStage: 100,
-    startTime: Math.floor((Date.now() + 60 * 1000) / 1000), // 1 mins later
-    endTime: Math.floor((Date.now() + 24 * 60 * 60 * 1000) / 1000), // 24 hour later
-    price: 1,
+    limitationForAddress: 5,
+    maxSupplyForStage: 1000,
+    startTime: 1739275200, // GMT Tuesday, February 11, 2025 12:00:00 PM
+    endTime: 1739750399, // GMT Sunday, February 16, 2025 11:59:59 PM
+    price: 10000000000000000n, // 0.01 IP
+    paymentToken: ethers.ZeroAddress,
+    payeeAddress: deployer,
+    allowListMerkleRoot:
+      "0x506fc6bfb0a55419a813e56bf8de8564b4600d188c1911f09ab1580df9e1be38",
+    stage: "OG",
+    mintType: 1,
+  };
+
+  await execute(
+    "MimbokuMultiround",
+    { from: deployer, log: true, gasLimit: 300000 },
+    "setStageMintInfo",
+    stageMintInfoOG
+  );
+
+  // set stage mint info for WL
+  const stageMintInfoWL = {
+    enableSig: 0,
+    limitationForAddress: 5,
+    maxSupplyForStage: 3980,
+    startTime: 1739275200, // GMT Tuesday, February 11, 2025 12:00:00 PM
+    endTime: 1739750399, // GMT Sunday, February 16, 2025 11:59:59 PM
+    price: 10000000000000000n, // 0.01 IP
     paymentToken: ethers.ZeroAddress,
     payeeAddress: deployer,
     allowListMerkleRoot:
@@ -120,21 +143,19 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   await execute(
     "MimbokuMultiround",
-    { from: deployer, log: true, gasLimit: 6000000 },
+    { from: deployer, log: true, gasLimit: 300000 },
     "setStageMintInfo",
-    stageMintInfo
+    stageMintInfoWL
   );
 
   // set stage mint info
   const stageMintInfo2 = {
     enableSig: 0,
     limitationForAddress: 1,
-    maxSupplyForStage: 100,
-    startTime: Math.floor(
-      (Date.now() + 24 * 60 * 60 * 1000 + 30 * 60 * 1000) / 1000
-    ), // 24 hour and 30 minutes later
-    endTime: Math.floor((Date.now() + 48 * 60 * 60 * 1000) / 1000), // 48 hour later
-    price: 2,
+    maxSupplyForStage: 3980,
+    startTime: 1739275200, // GMT Tuesday, February 11, 2025 12:00:00 PM
+    endTime: 1739750399, // GMT Sunday, February 16, 2025 11:59:59 PM
+    price: 20000000000000000n, // 0.02 IP
     paymentToken: ethers.ZeroAddress,
     payeeAddress: deployer,
     allowListMerkleRoot: ethers.ZeroHash,
@@ -144,7 +165,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   await execute(
     "MimbokuMultiround",
-    { from: deployer, log: true, gasLimit: 800000 },
+    { from: deployer, log: true, gasLimit: 300000 },
     "setStageMintInfo",
     stageMintInfo2
   );
@@ -152,9 +173,16 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   // setPreMintedCount for 20
   await execute(
     "MimbokuMultiround",
-    { from: deployer, log: true, gasLimit: 600000 },
+    { from: deployer, log: true, gasLimit: 200000 },
     "setPreMintedCount",
     20
+  );
+
+  await execute(
+    "MimbokuMultiround",
+    { from: deployer, log: true, gasLimit: 12500000 },
+    "setMaxsupply",
+    5000
   );
 };
 

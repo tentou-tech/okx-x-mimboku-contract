@@ -106,8 +106,6 @@ interface IMimbokuMultiround {
     /// the 3rd param, proof, is the proof for the leaf of the allowlist in a stage if mint type is Allowlist.
     /// @param mintparams    The mint parameter
     /// signer sign the caller's address (msg.sender) for this `mint` function.
-    /// @return tokenId The token ID of the minted NFT.
-    /// @return ipId The ID of the NFT IP.
     function mint(
         string calldata stage,
         bytes calldata signature,
@@ -132,8 +130,8 @@ interface IMimbokuMultiround {
     function totalSupply() external view returns (uint256);
 
     /// @notice Query configuration information for a specific stage
-    /// @param stage The stage name
-    function stageToMint(string memory stage)
+    /// @param stage_ The stage name
+    function stageToMint(string memory stage_)
         external
         view
         returns (

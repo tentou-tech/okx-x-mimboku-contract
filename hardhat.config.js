@@ -45,10 +45,10 @@ module.exports = {
       allowUnlimitedContractSize: true,
     },
     mainnet: {
-      url: "https://rpc-evm.story.rawaki.xyz/",
+      url: "https://mainnet.storyrpc.io",
       chainId: 1514,
       throwOnTransactionFailures: true,
-      gasPrice: 200000000,
+      gasPrice: 300000000,
       accounts: [privateKey],
       gas: 4000000,
       timeout: 120000,

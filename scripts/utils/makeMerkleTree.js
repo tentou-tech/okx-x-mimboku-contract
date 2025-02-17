@@ -3,16 +3,10 @@ const { default: MerkleTree } = require("merkletreejs");
 const keccak256 = ethers.keccak256;
 const fs = require("fs");
 
-//hardhat local node addresses from 0 to 3
+//ha"rdhat local node addresses from 0 to 3",
 const address = [
-  "0x95c2E9FA2A2834CB624361010fA91B038270F4BD",
-  "0xc173bB17b5D2C7BCEd8a6f50E6F9c1bD6bde48DD",
-  "0xe5a325ef78660df15b367d2f0e2469b4361c9884",
-  "0x92815b16a0563271dcf34ba6597123c136b671f7",
-  "0x5d2614e0630aa8a556d16bce96e78eaf08098021",
-  "0x7dfb98ac2167b16f667ad8ee3730cff849016a0f",
+  "0x9f5179ecD0F64e932Ea434aE8DE27Ea94574F632",
   "0x3a2D49d9282227a653c1A92b13E9742ad65Bba54",
-  "0x659c1E1D008b174CcE2Cf22632aaB1add333Dc50",
 ];
 
 //  Hashing All Leaf Individual
@@ -49,17 +43,14 @@ address.forEach((address) => {
   });
 });
 
-// Create WhiteList Object to write JSON file
+// Create CSV content from data array
+let csvContent = "address,proof\n";
+data.forEach((item) => {
+  csvContent += `${item.address},"${item.proof.join(",")}"\n`;
+});
 
-let whiteList = {
-  whiteList: data,
-};
-
-//  Stringify whiteList object and formating
-const metadata = JSON.stringify(whiteList, null, 2);
-
-// Write whiteList.json file in root dir
-fs.writeFile(`whiteList.json`, metadata, (err) => {
+// Write whiteList.csv file in root dir
+fs.writeFile(`whiteList.csv`, csvContent, (err) => {
   if (err) {
     throw err;
   }

@@ -1166,30 +1166,30 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-5.2.0.tgz#bd020694218202b811b0ea3eec07277814c658da"
   integrity sha512-bxjNie5z89W1Ea0NZLZluFh8PrFNn9DH8DQlujEok2yjsOlraUPKID5p1Wk3qdNbf6XkQ1Os2RvfiHrrXLHWKA==
 
-"@openzeppelin/defender-sdk-base-client@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-sdk-base-client/-/defender-sdk-base-client-2.1.0.tgz#f4f969fb327068c1024ba61b10a24f88cffdeece"
-  integrity sha512-YxrOgjESsbmxArLoe8kRA6lKwz/Qm/OtaZBfquzAg+w0jgOG9ogFuXA3NI6w2sVw1w/PzI1dWKe30u62p5vLXw==
+"@openzeppelin/defender-sdk-base-client@^2.1.0", "@openzeppelin/defender-sdk-base-client@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-sdk-base-client/-/defender-sdk-base-client-2.2.0.tgz#015b1b11352a9fa56a4d626ac180926c7212fce6"
+  integrity sha512-aZm8aP7HCcaczzO54JiOVZ6kmwoog1qmajwDGU+DJGshszYwy2x3TRtnRG1tyfAXmeu8yNSOpP5N+fuTt8X5rg==
   dependencies:
     "@aws-sdk/client-lambda" "^3.563.0"
     amazon-cognito-identity-js "^6.3.6"
     async-retry "^1.3.3"
 
 "@openzeppelin/defender-sdk-deploy-client@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-sdk-deploy-client/-/defender-sdk-deploy-client-2.1.0.tgz#02cfa27041c50f79694103c5ba80f0631375f481"
-  integrity sha512-tg1EIqFVQ59UNbEV7a5XHVvsGM1dL0tVrwXMB4EzlDnDRS70l6jjeCgl6d0SUQqK8Cob1AzjdLn9+Ax+oFcceQ==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-sdk-deploy-client/-/defender-sdk-deploy-client-2.2.0.tgz#509d30a4a5c065eb08aeea4ac0430c1029a34504"
+  integrity sha512-7LWY6DwHOjI0VlgvAVbPV4udWm3Q4de58EMLQvm1DG6eAaXIIZtfd3tV4mk6MYVLgBaiRbtSX0L9F9LH4p17OA==
   dependencies:
-    "@openzeppelin/defender-sdk-base-client" "^2.1.0"
+    "@openzeppelin/defender-sdk-base-client" "^2.2.0"
     axios "^1.7.4"
     lodash "^4.17.21"
 
 "@openzeppelin/defender-sdk-network-client@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-sdk-network-client/-/defender-sdk-network-client-2.1.0.tgz#6486fff52f3531604e325e4887839e020c127755"
-  integrity sha512-ebtSmihHMlcjFTtXyB/IFr+CjCcjdW0nV+ijG24SNnRvOaHn2BNORs6CwhdEZc8ok9YHWnKouGKdfzmxX+mp/A==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-sdk-network-client/-/defender-sdk-network-client-2.2.0.tgz#51ea4117498dcd5a42926ffb343c31828e5cbb51"
+  integrity sha512-d8sCjRBTEek+LKog2zVY3rtYVN8BsVGFcEh5g6VLJV3Ljmdf5SppjP6WPFlD7+IRKqmpiZ3R4EdzuhqOKMKKMA==
   dependencies:
-    "@openzeppelin/defender-sdk-base-client" "^2.1.0"
+    "@openzeppelin/defender-sdk-base-client" "^2.2.0"
     axios "^1.7.4"
     lodash "^4.17.21"
 
@@ -1881,9 +1881,9 @@
   integrity sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==
 
 "@types/node@*":
-  version "22.13.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.13.1.tgz#a2a3fefbdeb7ba6b89f40371842162fac0934f33"
-  integrity sha512-jK8uzQlrvXqEU91UxiK5J7pKHyzgnI1Qnl0QDHIgVGuolJhRb9EEl28Cj9b3rGR8B2lhFCtvIm5os8lFnO/1Ew==
+  version "22.13.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.13.4.tgz#3fe454d77cd4a2d73c214008b3e331bfaaf5038a"
+  integrity sha512-ywP2X0DYtX3y08eFVx5fNIw7/uIv8hYUKgXoK8oayJlLnKcRfEYCxWMVE1XagUdVtCJlZT1AU4LXEABW+L1Peg==
   dependencies:
     undici-types "~6.20.0"
 
@@ -2300,9 +2300,9 @@ bytes@3.1.2:
   integrity sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==
 
 call-bind-apply-helpers@^1.0.0, call-bind-apply-helpers@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/call-bind-apply-helpers/-/call-bind-apply-helpers-1.0.1.tgz#32e5892e6361b29b0b545ba6f7763378daca2840"
-  integrity sha512-BhYE+WDaywFg2TBWYNXAE+8B1ATnThNBqXHP5nQu0jWJdVvY2hvkpyB3qOmtmDePiS5/BDQ8wASEWGMWRG148g==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/call-bind-apply-helpers/-/call-bind-apply-helpers-1.0.2.tgz#4b5428c222be985d79c3d82657479dbe0b59b2d6"
+  integrity sha512-Sp1ablJ0ivDkSzjcaJdxEunN5/XvksFJ2sMBFfq6x0ryhQV/2b/KwFe21cMpmHtPOSij8K99/wSfoEuTObmuMQ==
   dependencies:
     es-errors "^1.3.0"
     function-bind "^1.1.2"
@@ -3844,9 +3844,9 @@ markdown-table@2.0.0:
     repeat-string "^1.0.0"
 
 match-all@^1.2.6:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/match-all/-/match-all-1.2.6.tgz#66d276ad6b49655551e63d3a6ee53e8be0566f8d"
-  integrity sha512-0EESkXiTkWzrQQntBu2uzKvLu6vVkUGz40nGPbSZuegcfE5UuSzNjLaIu76zJWuaT/2I3Z/8M06OlUOZLGwLlQ==
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/match-all/-/match-all-1.2.7.tgz#3c03b7f7ee372ae177aac5eca08c3ad6af59633a"
+  integrity sha512-qSpsBKarh55r9KyXzFC3xBLRf2GlGasba2em9kbpRsSlGvdTAqjx3QD0r3FKSARiW+OE4iMHYsolM3aX9n5djw==
 
 math-intrinsics@^1.1.0:
   version "1.1.0"
@@ -5462,6 +5462,6 @@ zksync-ethers@^5.0.0:
     ethers "~5.7.0"
 
 zod@^3.21.4:
-  version "3.24.1"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.24.1.tgz#27445c912738c8ad1e9de1bea0359fa44d9d35ee"
-  integrity sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==
+  version "3.24.2"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.24.2.tgz#8efa74126287c675e92f46871cfc8d15c34372b3"
+  integrity sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==

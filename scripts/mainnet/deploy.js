@@ -8,16 +8,25 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   const defaultAdmin = deployer;
 
+  const treasury = "0x33B5be3B224aa4e312487399b91358c168B80d55";
+
+  const merkleProofOG =
+    "0xfbabaccbc32bc8e8a90cefd5574c244abfd4955e7f78374ca8df1f7221fd3371";
+  const merkleProofWL =
+    "0xfcb602dd9b6bd1cd053240e6ad933ee9520fce8c52975f216707f76dc8886ec5";
+
+  const roundPrice = 46880000000000000000n; // 46.88 IP
+
   // deploy MimBokuMultiRound
   const iPMetadata = {
     rootNFT: {
-      contractAddress: "0xfbC38Bd2F4328364dE86695e724F80F2B78CB869",
+      contractAddress: "0x82116603bA6014f815eF1E1Ca33f04154D0d58cA",
       tokenIds: [1, 2],
       ipIds: [
-        "0x15E84a494C1a57b8681edf39A8755359c67f43FF",
-        "0xDB291421D5354A3A6F94046a64B710bB43523019",
+        "0xCdF104e4F24d593E16B9F6c382cEB1FB5573EEDd",
+        "0x4172dB7f0E227858FC02862d831848539bD931B1",
       ],
-      licenseTermsIds: [20, 20], // Commercial Remix license with 5% royalty
+      licenseTermsIds: [24, 24], // Commercial Remix license with 3% + 3% royalty
     },
     pilTemplate: "0x2E896b0b2Fdb7457499B56AAaA4AE55BCB4Cd316",
     ipAssetRegistry: "0x77319B4031e6eF1250907aa00018B8B1c67a244b",
@@ -26,6 +35,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     ipMetadataURI: "",
     ipMetadataHash: ethers.ZeroHash,
   };
+
   const mimBokuMultiRoundContract = await deploy("MimbokuMultiround", {
     admin: defaultAdmin,
     from: deployer,
@@ -43,36 +53,36 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log: true,
   });
 
-  // deploy MimBokuNFT
-  const minter = mimBokuMultiRoundContract.address;
-  const tokenName = "M for test";
-  const tokenSymbol = "MFT";
-  const baseURI = "ipfs://QmasGRG2tyRWGZ7YPyQvY4U1V1qtU73wPvrYg6MCLCTztw/";
-  const mimBokuNftContract = await deploy("MimBokuNFT", {
-    admin: defaultAdmin,
-    from: deployer,
-    gasLimit: 6000000,
-    proxy: {
-      execute: {
-        init: {
-          methodName: "initialize",
-          args: [defaultAdmin, minter, tokenName, tokenSymbol, baseURI],
-        },
-      },
-      proxyContract: "OpenZeppelinTransparentProxy",
-    },
-    args: [],
-    log: true,
-  });
+  // // deploy MimBokuNFT
+  // const minter = mimBokuMultiRoundContract.address;
+  // const tokenName = "Mimboku";
+  // const tokenSymbol = "MIMBOKU";
+  // const baseURI = "ipfs://QmasGRG2tyRWGZ7YPyQvY4U1V1qtU73wPvrYg6MCLCTztw/";
+  // const mimBokuNftContract = await deploy("MimBokuNFT", {
+  //   admin: defaultAdmin,
+  //   from: deployer,
+  //   gasLimit: 6000000,
+  //   proxy: {
+  //     execute: {
+  //       init: {
+  //         methodName: "initialize",
+  //         args: [defaultAdmin, minter, tokenName, tokenSymbol, baseURI],
+  //       },
+  //     },
+  //     proxyContract: "OpenZeppelinTransparentProxy",
+  //   },
+  //   args: [],
+  //   log: true,
+  // });
 
-  // set default royalty for MimBokuNFT
-  await execute(
-    "MimBokuNFT",
-    { from: deployer, log: true, gasLimit: 100000 },
-    "setDefaultRoyalty",
-    defaultAdmin,
-    500
-  );
+  // // set default royalty for MimBokuNFT
+  // await execute(
+  //   "MimBokuNFT",
+  //   { from: deployer, log: true, gasLimit: 100000 },
+  //   "setDefaultRoyalty",
+  //   treasury,
+  //   500
+  // );
 
   const owner = mimBokuMultiRoundContract.address;
   // deploy OKXMultiMint
@@ -98,22 +108,21 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     "MimbokuMultiround",
     { from: deployer, log: true, gasLimit: 50000 },
     "setContracts",
-    mimBokuNftContract.address,
+    "0xe42eF0e22b5BAacb9Dcea3e7F58a82D8033f0aCA",
     okxMultiMintContract.address
   );
 
   // set stage mint info for OG
   const stageMintInfoOG = {
     enableSig: 0,
-    limitationForAddress: 5,
-    maxSupplyForStage: 1000,
-    startTime: 1739275200, // GMT Tuesday, February 11, 2025 12:00:00 PM
-    endTime: 1739750399, // GMT Sunday, February 16, 2025 11:59:59 PM
-    price: 10000000000000000n, // 0.01 IP
+    limitationForAddress: 1,
+    maxSupplyForStage: 4980,
+    startTime: 1739800800, // GMT Monday, February 17, 2025 2:00:00 PM
+    endTime: 1739804400, // GMT Monday, February 17, 2025 3:00:00 PM
+    price: roundPrice,
     paymentToken: ethers.ZeroAddress,
-    payeeAddress: deployer,
-    allowListMerkleRoot:
-      "0x506fc6bfb0a55419a813e56bf8de8564b4600d188c1911f09ab1580df9e1be38",
+    payeeAddress: treasury,
+    allowListMerkleRoot: merkleProofOG,
     stage: "OG",
     mintType: 1,
   };
@@ -128,15 +137,14 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   // set stage mint info for WL
   const stageMintInfoWL = {
     enableSig: 0,
-    limitationForAddress: 5,
-    maxSupplyForStage: 3980,
-    startTime: 1739275200, // GMT Tuesday, February 11, 2025 12:00:00 PM
-    endTime: 1739750399, // GMT Sunday, February 16, 2025 11:59:59 PM
-    price: 10000000000000000n, // 0.01 IP
+    limitationForAddress: 1,
+    maxSupplyForStage: 4980,
+    startTime: 1739804400, // GMT Monday, February 17, 2025 3:00:00 PM
+    endTime: 1739808000, // GMT Monday, February 17, 2025 4:00:00 PM
+    price: roundPrice,
     paymentToken: ethers.ZeroAddress,
-    payeeAddress: deployer,
-    allowListMerkleRoot:
-      "0x506fc6bfb0a55419a813e56bf8de8564b4600d188c1911f09ab1580df9e1be38",
+    payeeAddress: treasury,
+    allowListMerkleRoot: merkleProofWL,
     stage: "Whitelist",
     mintType: 1,
   };
@@ -151,13 +159,13 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   // set stage mint info
   const stageMintInfo2 = {
     enableSig: 0,
-    limitationForAddress: 1,
-    maxSupplyForStage: 3980,
-    startTime: 1739275200, // GMT Tuesday, February 11, 2025 12:00:00 PM
-    endTime: 1739750399, // GMT Sunday, February 16, 2025 11:59:59 PM
-    price: 20000000000000000n, // 0.02 IP
+    limitationForAddress: 2,
+    maxSupplyForStage: 4980,
+    startTime: 1739808000, // GMT Monday, February 17, 2025 4:00:00 PM
+    endTime: 1739809800, // GMT Monday, February 17, 2025 4:30:00 PM
+    price: roundPrice,
     paymentToken: ethers.ZeroAddress,
-    payeeAddress: deployer,
+    payeeAddress: treasury,
     allowListMerkleRoot: ethers.ZeroHash,
     stage: "Public",
     mintType: 0,
@@ -175,7 +183,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     "MimbokuMultiround",
     { from: deployer, log: true, gasLimit: 200000 },
     "setPreMintedCount",
-    20
+    19
   );
 
   await execute(
